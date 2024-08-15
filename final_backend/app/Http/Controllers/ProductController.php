@@ -16,18 +16,15 @@ class ProductController extends Controller
     public function index()
     {
         if (auth()->check() && auth()->user()->isAdmin()) {
-            $products = Product::with('user')->get();
+
+            $products = Product::with(['user', 'category'])->get();
         } elseif (auth()->check()) {
-            $products = auth()->user()->products;
+            $products = auth()->user()->products()->with('category')->get();
         } else {
             return redirect('/dashboard')->with('message', 'Please log in to access your products.');
         }
-
         return view('products.index', compact('products'));
     }
-
-
-
 
 
     public function create()
@@ -50,7 +47,7 @@ class ProductController extends Controller
             'category_id' => $request->input('category_id'),
             'user_id' => Auth::id(),
         ]);
-        
+
 
         return redirect()->route('products.index')->with('success', 'Product created successfully!');
     }

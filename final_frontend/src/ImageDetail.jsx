@@ -8,29 +8,34 @@ const ImageDetail = () => {
     const { '*': imagePath } = useParams();
     const [imageUrl, setImageUrl] = useState('');
     const [product, setProduct] = useState(null);
+    const [categories, setCategories] = useState([]);
     const { addToCart } = useCart();
 
     useEffect(() => {
-        if (imagePath) {
-            setImageUrl(`http://127.0.0.1:8000/storage/${imagePath}`);
-            const fetchProductDetails = async () => {
-                try {
+        const fetchData = async () => {
+            try {
+                const categoriesResponse = await axios.get('http://127.0.0.1:8000/api/categories');
+                setCategories(categoriesResponse.data);
+
+                if (imagePath) {
+                    setImageUrl(`http://127.0.0.1:8000/storage/${imagePath}`);
                     const response = await axios.get(`http://127.0.0.1:8000/api/products`);
                     const filteredProduct = response.data.find(item => item.image_path === imagePath);
                     setProduct(filteredProduct);
-                } catch (error) {
-                    console.error("Error fetching product details:", error);
                 }
-            };
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        };
 
-            fetchProductDetails();
-        }
+        fetchData();
     }, [imagePath]);
 
     const handleAddToCart = (product) => {
         addToCart(product);
         toast.success(`${product.title} added to cart!`, { autoClose: 1000 });
     };
+
 
     return (
         <div className="flex flex-col md:flex-row items-center justify-center h-screen">
@@ -52,9 +57,10 @@ const ImageDetail = () => {
                         <p className="mb-4 italic text-left break-words">{product.description}</p>
                         <div className="text-left">
                             <p className="text-xl font-semibold mb-2">Price: ${product.price}</p>
+                            <p>Category: <span className="font-bold text-white">{product.category_id ? categories.find(cat => cat.id === product.category_id)?.name.charAt(0).toUpperCase() + categories.find(cat => cat.id === product.category_id)?.name.slice(1) : 'N/A'}</span></p>
                             <button
                                 onClick={() => handleAddToCart(product)}
-                                className="bg-green-500 w-full px-6 py-3 rounded hover:bg-green-600 mb-2"
+                                className="bg-green-500 w-full px-6 py-3 rounded hover:bg-green-600 mb-2 mt-4"
                             >
                                 Add to Cart
                             </button>
