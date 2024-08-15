@@ -12,7 +12,7 @@
             @foreach ($products as $product)
                 <div class="mb-5 break-inside-avoid">
                     @if ($product->image_path)
-                        <img src="{{ asset(' storage/'.$product->image_path) }}"
+                        <img src="{{ asset('storage/'.$product->image_path) }}"
                              alt="{{ $product->title }}"
                              class="w-full h-auto object-cover transition-transform duration-300 hover:scale-105">
                     @else

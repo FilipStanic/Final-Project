@@ -39,9 +39,12 @@
                 </div>
 
                 <div class="mb-4">
-                    <label class="block text-gray-700 font-bold mb-2">Description:</label>
-                    <textarea name="description" required class="border border-gray-300 rounded-md p-2 w-full text-black focus:outline-none focus:ring-2 focus:ring-blue-500">{{ old('description', $product->description) }}</textarea>
+                    <label class="block text-gray-700 font-bold mb-2">Description (optional):</label>
+                    <textarea name="description" class="border border-gray-300 rounded-md p-2 w-full text-black focus:outline-none focus:ring-2 focus:ring-blue-500">{{ old('description', $product->description) }}</textarea>
                     <small class="text-gray-500">Maximum 100 characters</small>
+                    @error('description')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <div class="mb-4">
@@ -66,6 +69,7 @@
                 <div class="mb-4">
                     <label class="block text-gray-700 font-bold mb-2">Image:</label>
                     <input type="file" name="image" class="border border-gray-300 rounded-md p-2 w-full text-black focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <small class="text-gray-500">Upload a new image to replace the existing one.</small>
                     @if ($product->image_path)
                         <img src="{{ asset('storage/'.$product->image_path) }}" alt="{{ $product->title }}" class="mt-2 mb-2" width="100">
                     @endif

@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import { useCart } from './CartContext';
+import { toast } from 'react-toastify';
 
 const ImageDetail = () => {
     const { '*': imagePath } = useParams();
     const [imageUrl, setImageUrl] = useState('');
     const [product, setProduct] = useState(null);
+    const { addToCart } = useCart();
 
     useEffect(() => {
         if (imagePath) {
@@ -23,6 +26,11 @@ const ImageDetail = () => {
             fetchProductDetails();
         }
     }, [imagePath]);
+
+    const handleAddToCart = (product) => {
+        addToCart(product);
+        toast.success(`${product.title} added to cart!`, { autoClose: 1000 });
+    };
 
     return (
         <div className="flex flex-col md:flex-row items-center justify-center h-screen">
@@ -44,8 +52,12 @@ const ImageDetail = () => {
                         <p className="mb-4 italic text-left break-words">{product.description}</p>
                         <div className="text-left">
                             <p className="text-xl font-semibold mb-2">Price: ${product.price}</p>
-                            <button className="bg-green-500 w-full px-6 py-3 rounded hover:bg-green-600 mb-2">Donate</button>
-                            <button className="bg-blue-200 w-full px-6 py-2 rounded text-black hover:bg-gray-300">Download</button>
+                            <button
+                                onClick={() => handleAddToCart(product)}
+                                className="bg-green-500 w-full px-6 py-3 rounded hover:bg-green-600 mb-2"
+                            >
+                                Add to Cart
+                            </button>
                         </div>
                     </div>
                 ) : (

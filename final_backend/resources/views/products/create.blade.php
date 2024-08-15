@@ -33,19 +33,19 @@
 
                 <div class="mb-4">
                     <label class="block text-gray-700 font-bold mb-2">Title:</label>
-                    <input type="text" name="title" required class="border border-gray-300 rounded-md p-2 w-full text-black focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <input type="text" name="title" value="{{ old('title') }}" required class="border border-gray-300 rounded-md p-2 w-full text-black focus:outline-none focus:ring-2 focus:ring-blue-500">
                     <small class="text-gray-500">Maximum 3 words, 100 characters</small>
                 </div>
 
                 <div class="mb-4">
-                    <label class="block text-gray-700 font-bold mb-2">Description:</label>
-                    <textarea name="description" required class="border border-gray-300 rounded-md p-2 w-full text-black focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                    <label class="block text-gray-700 font-bold mb-2">Description (optional):</label>
+                    <textarea name="description" class="border border-gray-300 rounded-md p-2 w-full text-black focus:outline-none focus:ring-2 focus:ring-blue-500">{{ old('description') }}</textarea>
                     <small class="text-gray-500">Maximum 100 characters</small>
                 </div>
 
                 <div class="mb-4">
                     <label class="block text-gray-700 font-bold mb-2">Price:</label>
-                    <input type="text" name="price" required class="border border-gray-300 rounded-md p-2 w-full text-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter price">
+                    <input type="number" name="price" value="{{ old('price') }}" required class="border border-gray-300 rounded-md p-2 w-full text-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter price" step="0.01">
                 </div>
 
                 <div class="mb-4">
@@ -57,7 +57,7 @@
                     <label class="block text-gray-700 font-bold mb-2">Category:</label>
                     <select name="category_id" required class="border border-gray-300 rounded-md p-2 w-full text-black bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
                         @foreach ($categories as $category)
-                            <option value="{{ $category->id }}">
+                            <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
                                 {{ ucfirst($category->name) }}
                             </option>
                         @endforeach

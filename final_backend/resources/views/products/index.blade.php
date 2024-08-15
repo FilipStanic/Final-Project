@@ -11,7 +11,7 @@
             @foreach ($products as $product)
                 <div class="bg-white p-4 rounded-lg shadow">
                     <h2 class="text-xl font-semibold text-center">{{ $product->title }}</h2>
-                    <p class="text-black0 mb-2">Category: <span class="font-bold text-gray-800">{{ ucfirst($product->category->name) }}</span></p>
+                    <p class="text-black mb-2">Category: <span class="font-bold text-gray-800">{{ ucfirst($product->category->name) }}</span></p>
                     <p class="font-bold mb-2">Price: <span class="text-green-500">${{ $product->price }}</span></p>
                     @if ($product->image_path)
                         <img src="{{ asset('storage/'.$product->image_path) }}" alt="{{ $product->title }}" class="mb-2 w-full h-48 object-cover rounded">
@@ -20,7 +20,7 @@
                     <div class="mt-4">
                         <a href="{{ route('products.show', $product->id) }}" class="text-blue-500 hover:underline">View</a>
                         <a href="{{ route('products.edit', $product->id) }}" class="text-yellow-500 hover:underline">Edit</a>
-                        <form action="{{ route('products.destroy', $product->id) }}" method="POST" style="display:inline;">
+                        <form action="{{ route('products.destroy', $product->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this product?');">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="text-red-500 hover:underline">Delete</button>
