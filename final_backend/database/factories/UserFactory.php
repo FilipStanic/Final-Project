@@ -37,7 +37,7 @@ class UserFactory extends Factory
         return $this->state(fn (array $attributes) => [
             'name' => 'Admin',
             'email' => 'admin@admin.com',
-            'email_verified_at' => null,
+            'email_verified_at' => now(),
             'password' => Hash::make('admin'),
             'role' => 'admin',
         ]);

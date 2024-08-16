@@ -28,6 +28,7 @@
                     @method('DELETE')
                     <button type="submit" class="text-red-500 hover:underline">Delete</button>
                 </form>
+                <p class="text-gray-500 mt-4">By: {{ $product->user->name }}</p>
             </div>
         </div>
     </div>

@@ -44,7 +44,7 @@
                 </form>
             @else
                 <a href="{{ route('login') }}" class="text-white bg-blue-500 hover:bg-blue-700 rounded px-4 py-2">Log In</a>
-                <a href="{{ route('register') }}" class="text-white bg-green-500 hover:bg-green-700 rounded px-4 py-2">Register</a>
+                <a href="{{ route('register') }}" class="text-white bg-purple-500 hover:bg-purple-700 rounded px-4 py-2">Register</a>
             @endif
         </div>
     </div>

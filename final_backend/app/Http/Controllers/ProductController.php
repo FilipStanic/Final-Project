@@ -7,25 +7,21 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Log;
-
 
 
 class ProductController extends Controller
 {
     public function index()
     {
-        if (auth()->check() && auth()->user()->isAdmin()) {
+        $user = auth()->user();
 
-            $products = Product::with(['user', 'category'])->get();
-        } elseif (auth()->check()) {
-            $products = auth()->user()->products()->with('category')->get();
+        if ($user->role === 'admin') {
+            $products = Product::all();
         } else {
-            return redirect('/dashboard')->with('message', 'Please log in to access your products.');
+            $products = Product::where('user_id', $user->id)->get();
         }
         return view('products.index', compact('products'));
     }
-
 
     public function create()
     {
@@ -70,7 +66,7 @@ class ProductController extends Controller
         $this->authorizeUser($product);
         $this->validateRequest($request, $product);
 
-        $imagePath = $product->image_path; // Default to existing image path
+        $imagePath = $product->image_path;
 
         if ($request->hasFile('image')) {
             if ($product->image_path) {
@@ -117,10 +113,4 @@ class ProductController extends Controller
         }
     }
 
-    private function authorizeUser(Product $product)
-    {
-        if ($product->user_id !== Auth::id() && Auth::user()->role !== 'admin') {
-            abort(403);
-        }
-    }
 }

@@ -2,7 +2,6 @@
 
 @section('content')
     <div class="container mt-4">
-
         <a href="{{ route('products.create') }}" class="text-white bg-blue-600 hover:bg-blue-500 rounded px-4 py-2 ml-4">
             Add New Image
         </a>
@@ -24,6 +23,7 @@
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="text-red-500 hover:underline">Delete</button>
+                            <p class="text-gray-500 mt-4">By: {{ $product->user->name }}</p>
                         </form>
                     </div>
                 </div>

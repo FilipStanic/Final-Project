@@ -7,6 +7,8 @@ import Cart from './Cart';
 import { CartProvider } from './CartContext';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Login from './Login';
+import Register from './Register';
 
 const App = () => {
     return (
@@ -17,6 +19,8 @@ const App = () => {
                         <Route path="/" element={<Products />} />
                         <Route path="/image/*" element={<ImageDetail />} />
                         <Route path="/cart" element={<Cart />} />
+                        <Route path="/login" element={<Login />} />
+                        <Route path="/register" element={<Register />} />
                     </Routes>
                     <ToastContainer />
                 </Layout>
