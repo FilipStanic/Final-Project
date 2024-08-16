@@ -40,12 +40,21 @@ class ApiController extends Controller
             return response()->json([
                 'message' => 'Login successful',
                 'token' => $token,
+                'user' => [
+                    'name' => $user->name,
+                ],
             ], 200);
         } catch (\Exception $e) {
-
             return response()->json(['error' => 'Something went wrong', 'details' => $e->getMessage()], 500);
         }
     }
+
+
+    public function getUser(Request $request)
+    {
+        return response()->json($request->user());
+    }
+
 
 
 }

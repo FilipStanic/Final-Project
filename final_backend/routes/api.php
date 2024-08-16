@@ -11,4 +11,5 @@ Route::get('/products/{imagePath}', [ApiController::class, 'getProductByImagePat
 
 Route::get('/categories', [CategoryController::class, 'index']);
 
-Route::post('/login', [AuthenticatedSessionController::class, 'store']);
+Route::post('/login', [ApiController::class, 'login']);
+Route::middleware('auth:sanctum')->get('/user', [ApiController::class, 'getUser']);

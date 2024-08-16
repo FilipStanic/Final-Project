@@ -1,9 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from './AuthContext';
 import { useCart } from './CartContext';
 import logo from './assets/echoes-logo.svg';
+import Logout from './Logout';
 
 const Layout = ({ children }) => {
+    const { user, authToken } = useAuth();
     const { cartItems } = useCart();
 
     return (
@@ -14,13 +17,33 @@ const Layout = ({ children }) => {
                         <img src={logo} alt="Logo" className="h-12" />
                     </Link>
                 </div>
-                <div className="flex items-center space-x-3">
-                    <Link to="/login">
-                        <button className="border py-1 px-4 rounded-3xl">Log In</button>
-                    </Link>
-                    <Link to="/register">
-                        <button className="border py-1 px-4 rounded-3xl">Register</button>
-                    </Link>
+                <div className="flex items-center space-x-4">
+                    {authToken ? (
+                        <div className="flex items-center space-x-4">
+                            <div className="text-white text-lg font-semibold">
+                                Welcome, {user ? user.name : 'User'}
+                            </div>
+                            <Link to="/profile">
+                                <button className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded-3xl">
+                                    My Profile
+                                </button>
+                            </Link>
+                            <Logout />
+                        </div>
+                    ) : (
+                        <div className="flex items-center space-x-4">
+                            <Link to="/login">
+                                <button className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded-3xl">
+                                    Log In
+                                </button>
+                            </Link>
+                            <Link to="/register">
+                                <button className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded-3xl">
+                                    Register
+                                </button>
+                            </Link>
+                        </div>
+                    )}
                     <div className="relative">
                         <Link to="/cart">
                             <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-shopping-cart h-8 w-8" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#ffffff" fill="none" strokeLinecap="round" strokeLinejoin="round">
