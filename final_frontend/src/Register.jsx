@@ -1,77 +1,100 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
+    const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
-    const [error, setError] = useState('');
+    const [passwordConfirmation, setPasswordConfirmation] = useState('');
+    const [error, setError] = useState(null);
+    const [success, setSuccess] = useState(null);
     const navigate = useNavigate();
 
-    const handleSubmit = async (e) => {
+    const handleRegister = async (e) => {
         e.preventDefault();
-        if (password !== confirmPassword) {
-            setError('Passwords do not match.');
-            return;
-        }
+        setError(null);
+
         try {
-            const response = await axios.post('http://127.0.0.1:8000/api/register', { email, password });
+            const response = await axios.post('http://127.0.0.1:8000/api/register', {
+                name,
+                email,
+                password,
+                password_confirmation: passwordConfirmation,
+            });
 
-            const token = response.data.token;
-            localStorage.setItem('authToken', token);
-
-            navigate('/');
-        } catch (err) {
-            setError(err.response ? err.response.data.message : 'Registration failed.');
+            setSuccess('Registration successful! Redirecting to login...');
+            setTimeout(() => {
+                navigate('/success');
+            }, 1500);
+        } catch (error) {
+            if (error.response && error.response.data) {
+                setError(error.response.data.message || 'Registration failed. Please try again.');
+            } else {
+                setError('Something went wrong. Please try again later.');
+            }
         }
     };
 
     return (
-        <div className="p-5 md:p-10 flex flex-col items-center justify-center min-h-screen bg-gray-800">
-            <h1 className="text-3xl font-bold mb-6 text-white">Register</h1>
-            {error && <p className="text-red-500 mb-4">{error}</p>}
-            <form onSubmit={handleSubmit} className="w-full max-w-sm bg-white p-8 rounded-lg shadow-md">
-                <div className="mb-4">
-                    <label htmlFor="email" className="block text-gray-700 font-bold mb-2">Email</label>
-                    <input
-                        type="email"
-                        id="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                        className="border rounded px-4 py-2 w-full text-black"
-                    />
-                </div>
-                <div className="mb-4">
-                    <label htmlFor="password" className="block text-gray-700 font-bold mb-2">Password</label>
-                    <input
-                        type="password"
-                        id="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                        className="border rounded px-4 py-2 w-full text-black"
-                    />
-                </div>
-                <div className="mb-4">
-                    <label htmlFor="confirm-password" className="block text-gray-700 font-bold mb-2">Confirm Password</label>
-                    <input
-                        type="password"
-                        id="confirm-password"
-                        value={confirmPassword}
-                        onChange={(e) => setConfirmPassword(e.target.value)}
-                        required
-                        className="border rounded px-4 py-2 w-full text-black"
-                    />
-                </div>
-                <button type="submit" className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded">
-                    Register
-                </button>
-                <p className="mt-4 text-center text-white">
-                    Already have an account? <Link to="/login" className="text-blue-500">Login here</Link>
-                </p>
-            </form>
+        <div className="flex justify-center items-center min-h-screen">
+            <div className="w-full max-w-md p-8 space-y-6 rounded-lg shadow-md">
+                <h2 className="text-2xl font-bold text-center text-white">Create Account</h2>
+                {error && <div className="text-red-500 text-center">{error}</div>}
+                {success && <div className="text-green-500 text-center">{success}</div>}
+                <form onSubmit={handleRegister} className="space-y-4">
+                    <div>
+                        <label htmlFor="name" className="block text-sm font-medium text-white">Name</label>
+                        <input
+                            type="text"
+                            id="name"
+                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-black"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="email" className="block text-sm font-medium text-white">Email</label>
+                        <input
+                            type="email"
+                            id="email"
+                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-black"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="password" className="block text-sm font-medium text-white">Password</label>
+                        <input
+                            type="password"
+                            id="password"
+                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-black"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="passwordConfirmation" className="block text-sm font-medium text-white">Confirm Password</label>
+                        <input
+                            type="password"
+                            id="passwordConfirmation"
+                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-black"
+                            value={passwordConfirmation}
+                            onChange={(e) => setPasswordConfirmation(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <button
+                        type="submit"
+                        className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                    >
+                        Register
+                    </button>
+                </form>
+            </div>
         </div>
     );
 };
