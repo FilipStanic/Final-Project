@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from './AuthContext';
 import { useCart } from './CartContext';
 import logo from './assets/echoes-logo.svg';
@@ -8,6 +8,7 @@ import Logout from './Logout';
 const Layout = ({ children }) => {
     const { user, authToken } = useAuth();
     const { cartItems } = useCart();
+    const navigate = useNavigate();
 
     return (
         <div className="bg-gray-800 min-h-screen flex flex-col text-white">
@@ -16,6 +17,21 @@ const Layout = ({ children }) => {
                     <Link to="/">
                         <img src={logo} alt="Logo" className="h-12" />
                     </Link>
+                </div>
+                <div className='flex'>
+                    <button
+                        className="bg-white text-black border border-white px-4 py-2 rounded-full text-lg font-semibold hover:bg-gray-200 flex items-center space-x-2"
+                        onClick={() => navigate('/upload')}
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-upload" width="20" height="20" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#000000" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                            <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" />
+                            <path d="M7 9l5 -5l5 5" />
+                            <path d="M12 4l0 12" />
+                        </svg>
+                        <span>Upload File</span>
+                    </button>
+
                 </div>
                 <div className="flex items-center space-x-4">
                     {authToken ? (

@@ -99,7 +99,10 @@ const Profile = () => {
                         )}
                     </div>
 
-                    <h2 className="text-xl font-semibold mb-4 text-white">Your Products</h2>
+                    <h2 className="text-xl font-semibold mb-4 text-white">
+                        {user.role === 'admin' ? 'All Products' : 'Your Products'}
+                    </h2>
+                    
                     {products.length === 0 ? (
                         <p className="text-white">No products available.</p>
                     ) : (
@@ -121,6 +124,12 @@ const Profile = () => {
                                         <h3 className="text-white text-lg font-semibold">{product.title}</h3>
                                         <p className="text-white">{product.description}</p>
                                         <p className="text-white font-bold mt-2">Price: ${product.price}</p>
+
+                                        {user.role === 'admin' && (
+                                            <p className="text-sm text-gray-300">
+                                                Created by: {product.user.name || product.user.email}
+                                            </p>
+                                        )}
                                     </div>
                                 </div>
                             ))}

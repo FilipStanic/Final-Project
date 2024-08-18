@@ -12,11 +12,9 @@ export const AuthProvider = ({ children }) => {
             axios.get('http://127.0.0.1:8000/api/user', {
                 headers: { Authorization: `Bearer ${authToken}` }
             })
-            .then(response => {
-                setUser(response.data);
-            })
+            .then(response => setUser(response.data))
             .catch(error => {
-                console.error('Error fetching user data', error);
+                console.error('Error fetching user data:', error);
             });
         } else {
             setUser(null);

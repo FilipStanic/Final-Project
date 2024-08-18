@@ -12,6 +12,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import Login from './Login';
 import Register from './Register';
 import RegistrationSuccess from './RegistrationSuccess';
+import Checkout from './Checkout';
+import UploadImg from './UploadImg';
 
 const App = () => {
     return (
@@ -27,6 +29,8 @@ const App = () => {
                             <Route path="/register" element={<Register />} />
                             <Route path="/success" element={<RegistrationSuccess />} />
                             <Route path="/profile" element={<Profile />} />
+                            <Route path="/checkout" element={<Checkout />} />
+                            <Route path="/upload" element={<UploadImg />} />
                         </Routes>
                         <ToastContainer />
                     </Layout>

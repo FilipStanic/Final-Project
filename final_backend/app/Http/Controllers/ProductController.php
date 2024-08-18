@@ -16,12 +16,14 @@ class ProductController extends Controller
         $user = auth()->user();
 
         if ($user->role === 'admin') {
-            $products = Product::all();
+            $products = Product::with('user:id,name,email')->get();
         } else {
-            $products = Product::where('user_id', $user->id)->get();
+            $products = Product::where('user_id', $user->id)->with('user:id,name,email')->get();
         }
+
         return view('products.index', compact('products'));
     }
+
 
     public function create()
     {

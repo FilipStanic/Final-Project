@@ -1,9 +1,11 @@
 import React from 'react';
 import { useCart } from './CartContext';
 import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom';
 
 const Cart = () => {
     const { cartItems, setCartItems } = useCart();
+    const navigate = useNavigate();
 
     const updateQuantity = (item, delta) => {
         setCartItems(prevItems => {
@@ -48,8 +50,11 @@ const Cart = () => {
             }
         });
     };
-    
 
+    const handleCheckout = () => {
+        navigate('/checkout');
+    }
+    
     const totalPrice = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
 
     return (
@@ -128,6 +133,7 @@ const Cart = () => {
                     <div className="mt-6">
                         <button 
                             className="w-full bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded font-semibold text-lg"
+                            onClick={handleCheckout}
                         >
                             Proceed to Checkout
                         </button>

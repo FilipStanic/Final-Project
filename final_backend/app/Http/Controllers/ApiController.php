@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cart;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -116,7 +117,4 @@ class ApiController extends Controller
             return response()->json(['error' => 'Something went wrong', 'details' => $e->getMessage()], 500);
         }
     }
-
-
-
 }
