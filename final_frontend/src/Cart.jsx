@@ -2,6 +2,7 @@ import React from 'react';
 import { useCart } from './CartContext';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const Cart = () => {
     const { cartItems, setCartItems } = useCart();
@@ -51,9 +52,16 @@ const Cart = () => {
         });
     };
 
-    const handleCheckout = () => {
-        navigate('/checkout');
-    }
+    const handleProceedToCheckout = async () => {
+        try {
+            await axios.post('http://127.0.0.1:8000/api/cart/checkout', {
+                items: cartItems
+            });
+            navigate('/checkout');
+        } catch (error) {
+            Swal.fire('Error', 'There was an error proceeding to checkout.', 'error');
+        }
+    };
     
     const totalPrice = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
 
@@ -133,7 +141,7 @@ const Cart = () => {
                     <div className="mt-6">
                         <button 
                             className="w-full bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded font-semibold text-lg"
-                            onClick={handleCheckout}
+                            onClick={handleProceedToCheckout}
                         >
                             Proceed to Checkout
                         </button>
