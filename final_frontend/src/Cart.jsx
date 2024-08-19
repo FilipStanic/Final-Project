@@ -7,6 +7,7 @@ import axios from 'axios';
 const Cart = () => {
     const { cartItems, setCartItems } = useCart();
     const navigate = useNavigate();
+    const token = localStorage.getItem('authToken');
 
     const updateQuantity = (item, delta) => {
         setCartItems(prevItems => {
@@ -29,14 +30,31 @@ const Cart = () => {
             confirmButtonColor: '#d33',
             cancelButtonColor: '#3085d6',
             confirmButtonText: 'Yes, clear it!'
-        }).then((result) => {
+        }).then(async (result) => {
             if (result.isConfirmed) {
-                setCartItems([]);
+                try {
+                    await axios.delete('http://127.0.0.1:8000/api/cart', {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    });
+                    setCartItems([]);
+                    Swal.fire('Cleared!', 'Your cart has been cleared.', 'success');
+                } catch (error) {
+                    console.error('Error clearing cart:', error);
+                    Swal.fire('Error', 'There was an error clearing your cart.', 'error');
+                }
             }
         });
     };
+    
 
-    const handleRemoveItem = (item) => {
+    const handleRemoveItem = async (item) => {
+        if (!item.id) {
+            console.error('Product ID is missing for the item:', item);
+            return;
+        }
+    
         Swal.fire({
             title: 'Are you sure?',
             text: `Do you want to remove ${item.title} from the cart?`,
@@ -45,24 +63,73 @@ const Cart = () => {
             confirmButtonColor: '#d33',
             cancelButtonColor: '#3085d6',
             confirmButtonText: 'Yes, remove it!'
-        }).then((result) => {
+        }).then(async (result) => {
             if (result.isConfirmed) {
-                setCartItems(prevItems => prevItems.filter(i => i.title !== item.title));
+                try {
+                    console.log('Removing item with id:', item.id);
+                    await axios.delete(`http://127.0.0.1:8000/api/cart/item/${item.id}`, {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    });
+    
+                    setCartItems(prevItems => prevItems.filter(i => i.id !== item.id));
+    
+                    Swal.fire('Removed!', `${item.title} has been removed from your cart.`, 'success');
+                } catch (error) {
+                    console.error('Error removing item from cart:', error);
+                    Swal.fire('Error', 'There was an error removing the item from your cart.', 'error');
+                }
             }
         });
     };
-
+    
+    
     const handleProceedToCheckout = async () => {
         try {
-            await axios.post('http://127.0.0.1:8000/api/cart/checkout', {
-                items: cartItems
+            const itemsToUpdate = cartItems.map(item => {
+                if (!item.id) { 
+                    console.error('Product ID is missing for the item:', item);
+                    return null;
+                }
+                return {
+                    product_id: item.id,
+                    quantity: item.quantity
+                };
+            }).filter(Boolean);
+    
+            console.log('Sending updateCart request', { items: itemsToUpdate });
+    
+            const updateResponse = await axios.post('http://127.0.0.1:8000/api/cart/update', {
+                items: itemsToUpdate
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
             });
+    
+            console.log('Cart quantities updated successfully', updateResponse.data);
+    
+            const checkoutResponse = await axios.post('http://127.0.0.1:8000/api/cart/checkout', {
+                items: itemsToUpdate
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+    
+            console.log('Checkout successful', checkoutResponse.data);
             navigate('/checkout');
         } catch (error) {
-            Swal.fire('Error', 'There was an error proceeding to checkout.', 'error');
+            console.error('Error proceeding to checkout:', error);
+            Swal.fire('Error', 'There was an error processing your checkout.', 'error');
         }
     };
     
+    
+    
+    
+
     const totalPrice = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
 
     return (

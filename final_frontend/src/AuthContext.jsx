@@ -9,13 +9,21 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         if (authToken) {
-            axios.get('http://127.0.0.1:8000/api/user', {
-                headers: { Authorization: `Bearer ${authToken}` }
-            })
-            .then(response => setUser(response.data))
-            .catch(error => {
-                console.error('Error fetching user data:', error);
-            });
+            const fetchUser = async () => {
+                try {
+                    const response = await axios.get('http://127.0.0.1:8000/api/user', {
+                        headers: { Authorization: `Bearer ${authToken}` }
+                    });
+                    setUser(response.data);
+                } catch (error) {
+                    console.error('Error fetching user data:', error);
+                    setAuthToken('');
+                    localStorage.removeItem('authToken');
+                    setUser(null);
+                }
+            };
+
+            fetchUser();
         } else {
             setUser(null);
         }

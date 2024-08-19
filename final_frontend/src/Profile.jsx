@@ -11,11 +11,14 @@ const Profile = () => {
 
     useEffect(() => {
         const fetchProducts = async () => {
+            if (!authToken) {
+                console.error('No authentication token found.');
+                return;
+            }
+
             try {
                 const response = await axios.get('http://127.0.0.1:8000/api/products', {
-                    headers: {
-                        Authorization: `Bearer ${authToken}`
-                    }
+                    headers: { Authorization: `Bearer ${authToken}` }
                 });
 
                 if (user.role === 'admin') {
@@ -25,6 +28,7 @@ const Profile = () => {
                 }
             } catch (error) {
                 console.error('Error fetching products:', error);
+                // Optionally handle token expiration or other errors here
             }
         };
 
@@ -40,9 +44,7 @@ const Profile = () => {
             }
 
             await axios.delete(`http://127.0.0.1:8000/api/user/${user.id}`, {
-                headers: {
-                    Authorization: `Bearer ${authToken}`,
-                },
+                headers: { Authorization: `Bearer ${authToken}` }
             });
 
             Swal.fire({
@@ -90,7 +92,7 @@ const Profile = () => {
                         <p className="text-white"><strong>Name:</strong> {user.name}</p>
                         <p className="text-white"><strong>Email:</strong> {user.email}</p>
                         {user.role !== 'admin' && (
-                            <button 
+                            <button
                                 className="mt-4 py-2 px-4 bg-red-600 text-white rounded hover:bg-red-700"
                                 onClick={handleDeleteAccount}
                             >
@@ -102,7 +104,7 @@ const Profile = () => {
                     <h2 className="text-xl font-semibold mb-4 text-white">
                         {user.role === 'admin' ? 'All Products' : 'Your Products'}
                     </h2>
-                    
+
                     {products.length === 0 ? (
                         <p className="text-white">No products available.</p>
                     ) : (
@@ -127,7 +129,7 @@ const Profile = () => {
 
                                         {user.role === 'admin' && (
                                             <p className="text-sm text-gray-300">
-                                                Created by: {product.user.name || product.user.email}
+                                                Created by: {product.user?.name || product.user?.email}
                                             </p>
                                         )}
                                     </div>

@@ -9,20 +9,21 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 
+
 class ProductController extends Controller
 {
     public function index()
     {
         $user = auth()->user();
-
+        
         if ($user->role === 'admin') {
             $products = Product::with('user:id,name,email')->get();
         } else {
             $products = Product::where('user_id', $user->id)->with('user:id,name,email')->get();
         }
-
         return view('products.index', compact('products'));
     }
+
 
 
     public function create()

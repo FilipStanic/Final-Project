@@ -10,16 +10,25 @@ const ImageDetail = () => {
     const [product, setProduct] = useState(null);
     const [categories, setCategories] = useState([]);
     const { addToCart } = useCart();
+    const token = localStorage.getItem('authToken');
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const categoriesResponse = await axios.get('http://127.0.0.1:8000/api/categories');
+                const categoriesResponse = await axios.get('http://127.0.0.1:8000/api/categories', {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
                 setCategories(categoriesResponse.data);
 
                 if (imagePath) {
                     setImageUrl(`http://127.0.0.1:8000/storage/${imagePath}`);
-                    const response = await axios.get(`http://127.0.0.1:8000/api/products`);
+                    const response = await axios.get(`http://127.0.0.1:8000/api/products`, {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    });
                     const filteredProduct = response.data.find(item => item.image_path === imagePath);
                     setProduct(filteredProduct);
                 }
@@ -29,13 +38,12 @@ const ImageDetail = () => {
         };
 
         fetchData();
-    }, [imagePath]);
+    }, [imagePath, token]);
 
     const handleAddToCart = (product) => {
         addToCart(product);
         toast.success(`${product.title} added to cart!`, { autoClose: 1000 });
     };
-
 
     return (
         <div className="flex flex-col md:flex-row items-center justify-center h-screen">
