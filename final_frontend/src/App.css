@@ -1,0 +1,90 @@
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600&family=Quicksand:wght@400;500&display=swap');
+
+
+body {
+    font-family: 'Quicksand', sans-serif;
+    background-color: rgb(204, 226, 250);
+    color: rgb(9, 58, 116);
+    margin: 0;
+    padding: 0;
+}
+
+header, footer {
+    background-color: rgb(9, 58, 116);
+    color: rgb(255, 255, 255);
+}
+
+h1, h2, h3, h4 {
+    font-family: 'Oswald', sans-serif;
+    color: rgb(255, 150, 105);
+}
+
+a, p, li {
+    color: rgb(9, 58, 116);
+}
+
+nav a:hover, a:hover {
+    color: rgb(255, 150, 105);
+}
+
+
+header {
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header img {
+    height: 50px;
+}
+
+nav a {
+    text-decoration: none;
+    font-weight: 500;
+    margin: 0 15px;
+}
+
+
+button, .btn {
+    background-color: rgb(255, 150, 105);
+    color: rgb(255, 255, 255);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-family: 'Quicksand', sans-serif;
+    font-size: 16px;
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+button:hover, .btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+
+.main-content {
+    padding: 20px;
+}
+
+.card {
+    background-color: rgb(255, 255, 255);
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    padding: 20px;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 20px;
+    margin-top: auto;
+}

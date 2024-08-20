@@ -13,22 +13,26 @@ class ApiController extends Controller
 {
     public function getProducts()
     {
-        $products = Product::all();
+
+        $products = Product::with('user:id,name,email')->get();
+
         return response()->json($products);
     }
+
 
     public function getUserProducts(Request $request)
     {
         $user = Auth::user();
 
         if ($user->role === 'admin') {
-            $products = Product::all();
+            $products = Product::with('user:id,name,email')->get();
         } else {
-            $products = Product::where('user_id', $user->id)->get();
+            $products = Product::where('user_id', $user->id)->with('user:id,name,email')->get();
         }
 
         return response()->json($products);
     }
+
 
 
     public function getProductByImagePath($imagePath)
@@ -117,4 +121,38 @@ class ApiController extends Controller
             return response()->json(['error' => 'Something went wrong', 'details' => $e->getMessage()], 500);
         }
     }
+
+    public function store(Request $request)
+    {
+
+        $validatedData = $request->validate([
+            'title' => 'required|string|max:100',
+            'description' => 'nullable|string|max:100',
+            'price' => 'required|numeric',
+            'image' => 'required|image|max:10000',
+            'category_id' => 'required|exists:categories,id',
+        ]);
+
+
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('images', 'public');
+        } else {
+            return response()->json(['error' => 'Image not uploaded correctly'], 400);
+        }
+
+
+        $product = Product::create([
+            'title' => $validatedData['title'],
+            'description' => $validatedData['description'],
+            'price' => $validatedData['price'],
+            'image_path' => $imagePath,
+            'category_id' => $validatedData['category_id'],
+            'user_id' => Auth::id(),
+        ]);
+
+        return response()->json(['message' => 'Product created successfully!', 'product' => $product], 201);
+    }
+
+
+
 }

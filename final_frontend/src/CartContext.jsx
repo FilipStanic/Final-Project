@@ -1,5 +1,6 @@
 import React, { createContext, useState, useContext } from 'react';
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
 const CartContext = createContext();
 
@@ -28,17 +29,17 @@ export const CartProvider = ({ children }) => {
         setCartItems(updatedItems);
 
         try {
-            console.log('Sending updateCart request', { items: payload });
-            const response = await axios.post('http://127.0.0.1:8000/api/cart/update', {
+            await axios.post('http://127.0.0.1:8000/api/cart/update', {
                 items: payload
             }, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
             });
-            console.log('Cart updated successfully', response.data);
+
         } catch (error) {
             console.error('Error updating cart:', error);
+            Swal.fire('Error', 'There was an error updating your cart.', 'error');
         }
     };
 
@@ -48,4 +49,3 @@ export const CartProvider = ({ children }) => {
         </CartContext.Provider>
     );
 };
-

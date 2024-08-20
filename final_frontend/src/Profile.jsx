@@ -10,30 +10,25 @@ const Profile = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const fetchProducts = async () => {
+        const fetchUserProducts = async () => {
             if (!authToken) {
                 console.error('No authentication token found.');
                 return;
             }
 
             try {
-                const response = await axios.get('http://127.0.0.1:8000/api/products', {
+                const response = await axios.get('http://127.0.0.1:8000/api/user/products', {
                     headers: { Authorization: `Bearer ${authToken}` }
                 });
 
-                if (user.role === 'admin') {
-                    setProducts(response.data);
-                } else {
-                    setProducts(response.data.filter(product => product.user_id === user.id));
-                }
+                setProducts(response.data);
             } catch (error) {
-                console.error('Error fetching products:', error);
-                // Optionally handle token expiration or other errors here
+                console.error('Error fetching user products:', error);
             }
         };
 
         if (authToken) {
-            fetchProducts();
+            fetchUserProducts();
         }
     }, [authToken, user]);
 
@@ -84,7 +79,7 @@ const Profile = () => {
     };
 
     return (
-        <div className="max-w-7xl mx-auto mt-10 p-6 bg-gray-800 rounded-lg">
+        <div className="max-w-7xl mx-auto mt-10 p-6 border rounded-lg">
             <h1 className="text-2xl font-bold mb-4 text-white">My Profile</h1>
             {user ? (
                 <div>
@@ -101,16 +96,14 @@ const Profile = () => {
                         )}
                     </div>
 
-                    <h2 className="text-xl font-semibold mb-4 text-white">
-                        {user.role === 'admin' ? 'All Products' : 'Your Products'}
-                    </h2>
+                    <h2 className="text-xl font-semibold mb-4 text-white">Your Products</h2>
 
                     {products.length === 0 ? (
-                        <p className="text-white">No products available.</p>
+                        <p className="text-white">No products yet.</p>
                     ) : (
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                             {products.map(product => (
-                                <div key={product.id} className="bg-gray-700 rounded overflow-hidden shadow-lg">
+                                <div key={product.id} className="bg-indigo-700 rounded overflow-hidden shadow-lg">
                                     {product.image_path ? (
                                         <img
                                             src={`http://127.0.0.1:8000/storage/${product.image_path}`}
@@ -129,7 +122,7 @@ const Profile = () => {
 
                                         {user.role === 'admin' && (
                                             <p className="text-sm text-gray-300">
-                                                Created by: {product.user?.name || product.user?.email}
+                                                Created by: {product.user ? product.user.name : ''}
                                             </p>
                                         )}
                                     </div>

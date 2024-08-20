@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
+
 
 const UploadImg = () => {
     const [categories, setCategories] = useState([]);
@@ -10,6 +13,9 @@ const UploadImg = () => {
         image: null,
         category_id: ''
     });
+
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchCategories = async () => {
@@ -34,7 +40,7 @@ const UploadImg = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+    
         const data = new FormData();
         data.append('title', formData.title);
         data.append('description', formData.description);
@@ -42,17 +48,32 @@ const UploadImg = () => {
         data.append('image', formData.image);
         data.append('category_id', formData.category_id);
 
+    
         try {
-            await axios.post('http://127.0.0.1:8000/api/products', data, {
+            const response = await axios.post('http://127.0.0.1:8000/api/products', data, {
                 headers: {
-                    'Content-Type': 'multipart/form-data'
+                    'Content-Type': 'multipart/form-data',
+                    Authorization: `Bearer ${localStorage.getItem('authToken')}`
                 }
             });
-            alert('Product uploaded successfully!');
+            
+
+            Swal.fire({
+                title: 'Success!',
+                text: 'Product was created successfully!',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            }).then(() => {
+                navigate('/');
+            });
+
+
         } catch (error) {
             console.error('Error uploading product:', error);
         }
     };
+    
+
 
     return (
         <div className="p-6 rounded-lg w-11/12 max-w-md mx-auto">
@@ -84,7 +105,7 @@ const UploadImg = () => {
                 </div>
 
                 <div className="mb-4">
-                    <label className="block  font-bold mb-2">Price:</label>
+                    <label className="block  font-bold mb-2">Price (USD):</label>
                     <input
                         type="number"
                         name="price"

@@ -39,22 +39,19 @@ const Cart = () => {
                         }
                     });
                     setCartItems([]);
-                    Swal.fire('Cleared!', 'Your cart has been cleared.', 'success');
                 } catch (error) {
-                    console.error('Error clearing cart:', error);
                     Swal.fire('Error', 'There was an error clearing your cart.', 'error');
                 }
             }
         });
     };
-    
 
     const handleRemoveItem = async (item) => {
         if (!item.id) {
-            console.error('Product ID is missing for the item:', item);
+            Swal.fire('Error', 'Product ID is missing for the item.', 'error');
             return;
         }
-    
+
         Swal.fire({
             title: 'Are you sure?',
             text: `Do you want to remove ${item.title} from the cart?`,
@@ -66,30 +63,27 @@ const Cart = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    console.log('Removing item with id:', item.id);
                     await axios.delete(`http://127.0.0.1:8000/api/cart/item/${item.id}`, {
                         headers: {
                             Authorization: `Bearer ${token}`
                         }
                     });
-    
+
                     setCartItems(prevItems => prevItems.filter(i => i.id !== item.id));
-    
+
                     Swal.fire('Removed!', `${item.title} has been removed from your cart.`, 'success');
                 } catch (error) {
-                    console.error('Error removing item from cart:', error);
                     Swal.fire('Error', 'There was an error removing the item from your cart.', 'error');
                 }
             }
         });
     };
-    
-    
+
     const handleProceedToCheckout = async () => {
         try {
             const itemsToUpdate = cartItems.map(item => {
-                if (!item.id) { 
-                    console.error('Product ID is missing for the item:', item);
+                if (!item.id) {
+                    Swal.fire('Error', 'Product ID is missing for some items.', 'error');
                     return null;
                 }
                 return {
@@ -97,43 +91,37 @@ const Cart = () => {
                     quantity: item.quantity
                 };
             }).filter(Boolean);
-    
-            console.log('Sending updateCart request', { items: itemsToUpdate });
-    
-            const updateResponse = await axios.post('http://127.0.0.1:8000/api/cart/update', {
+
+            if (itemsToUpdate.length === 0) {
+                Swal.fire('Error', 'No valid items to update in the cart.', 'error');
+                return;
+            }
+
+            await axios.post('http://127.0.0.1:8000/api/cart/update', {
                 items: itemsToUpdate
             }, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
             });
-    
-            console.log('Cart quantities updated successfully', updateResponse.data);
-    
-            const checkoutResponse = await axios.post('http://127.0.0.1:8000/api/cart/checkout', {
+
+            await axios.post('http://127.0.0.1:8000/api/cart/checkout', {
                 items: itemsToUpdate
             }, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
             });
-    
-            console.log('Checkout successful', checkoutResponse.data);
             navigate('/checkout');
         } catch (error) {
-            console.error('Error proceeding to checkout:', error);
             Swal.fire('Error', 'There was an error processing your checkout.', 'error');
         }
     };
-    
-    
-    
-    
 
     const totalPrice = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
 
     return (
-        <div className="p-4 text-white bg-gray-800 rounded-lg shadow-md">
+        <div className="p-4 text-white bg-indigo-900 rounded-lg shadow-md">
             <h1 className="text-2xl font-bold mb-4">Your Cart</h1>
             {cartItems.length === 0 ? (
                 <p>Your cart is empty.</p>
@@ -169,12 +157,12 @@ const Cart = () => {
                                             </button>
                                         </div>
                                     </div>
-                                    <button 
-                                        onClick={() => handleRemoveItem(item)} 
+                                    <button
+                                        onClick={() => handleRemoveItem(item)}
                                         className="text-red-500 hover:text-red-700"
                                     >
                                         <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-trash" width="24" height="24" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#ffffff" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                             <path d="M4 7l16 0" />
                                             <path d="M10 11l0 6" />
                                             <path d="M14 11l0 6" />
@@ -187,12 +175,12 @@ const Cart = () => {
                         ))}
                     </ul>
                     <div className="flex justify-between items-center mt-4">
-                        <button 
-                            onClick={handleClearCart} 
+                        <button
+                            onClick={handleClearCart}
                             className="flex items-center text-red-500 hover:text-red-700"
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-trash" width="24" height="24" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#ffffff" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                 <path d="M4 7l16 0" />
                                 <path d="M10 11l0 6" />
                                 <path d="M14 11l0 6" />
@@ -206,7 +194,7 @@ const Cart = () => {
                         <p className="text-xl font-semibold">Total: ${totalPrice.toFixed(2)}</p>
                     </div>
                     <div className="mt-6">
-                        <button 
+                        <button
                             className="w-full bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded font-semibold text-lg"
                             onClick={handleProceedToCheckout}
                         >

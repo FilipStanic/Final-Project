@@ -60,7 +60,7 @@ const ImageDetail = () => {
             </div>
             <div className="flex flex-col items-center justify-center w-full md:w-1/2 p-4">
                 {product ? (
-                    <div className="bg-gray-900 text-white px-8 py-4 mb-4 rounded-lg shadow-sm shadow-white w-full max-w-lg">
+                    <div className=" text-white px-8 py-4 mb-4 rounded-lg border w-full max-w-lg">
                         <h1 className="text-4xl font-bold mb-2 text-left">{product.title}</h1>
                         <p className="mb-4 italic text-left break-words">{product.description}</p>
                         <div className="text-left">

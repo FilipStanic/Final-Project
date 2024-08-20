@@ -11,58 +11,57 @@ const Layout = ({ children }) => {
     const navigate = useNavigate();
 
     return (
-        <div className="bg-gray-800 min-h-screen flex flex-col text-white">
-            <header className="bg-gray-900 p-4 flex justify-between items-center relative">
+        <div className="bg-gradient-to-r from-blue-100 via-pink-100 to-purple-100 min-h-screen flex flex-col font-sans text-gray-900">
+            <header className="bg-purple-600 shadow-md p-4 flex justify-between items-center">
                 <div className="flex items-center space-x-4">
                     <Link to="/">
-                        <img src={logo} alt="Logo" className="h-12" />
+                        <img src={logo} alt="Logo" className="h-10 text-blue-100" />
                     </Link>
+                    <nav className="hidden md:flex space-x-6">
+                        <Link to="/profile" className="text-white hover:text-yellow-300">
+                            My Profile
+                        </Link>
+                        <Link to="/about" className="text-white hover:text-yellow-300">
+                            About Us
+                        </Link>
+                        <Link to="/contact" className="text-white hover:text-yellow-300">
+                            Contact
+                        </Link>
+                    </nav>
                 </div>
-                <div className='flex'>
+                <div className="flex items-center space-x-4">
                     <button
-                        className="bg-white text-black border border-white px-4 py-2 rounded-full text-lg font-semibold hover:bg-gray-200 flex items-center space-x-2"
+                        className="bg-green-500 hover:bg-green-400 text-white px-4 py-2 rounded-full text-sm font-medium flex items-center space-x-2"
                         onClick={() => navigate('/upload')}
                     >
-                        <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-upload" width="20" height="20" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#000000" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#ffffff" fill="none" strokeLinecap="round" strokeLinejoin="round">
                             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                             <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" />
                             <path d="M7 9l5 -5l5 5" />
                             <path d="M12 4l0 12" />
                         </svg>
-                        <span>Upload File</span>
+                        <span>Upload</span>
                     </button>
-
-                </div>
-                <div className="flex items-center space-x-4">
                     {authToken ? (
                         <div className="flex items-center space-x-4">
-                            <div className="text-white text-lg font-semibold">
-                                Welcome, {user ? user.name : 'User'}
+                            <div className="text-white text-sm font-medium">
+                                Welcome, {user ? user.name : ''}
                             </div>
-                            <Link to="/profile">
-                                <button className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded-3xl">
-                                    My Profile
-                                </button>
-                            </Link>
                             <Logout />
                         </div>
                     ) : (
                         <div className="flex items-center space-x-4">
-                            <Link to="/login">
-                                <button className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded-3xl">
-                                    Log In
-                                </button>
+                            <Link to="/login" className="text-white hover:text-yellow-300 text-sm font-medium">
+                                Log In
                             </Link>
-                            <Link to="/register">
-                                <button className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded-3xl">
-                                    Register
-                                </button>
+                            <Link to="/register" className="bg-yellow-500 hover:bg-yellow-400 text-gray-900 px-4 py-2 rounded-full text-sm font-medium">
+                                Register
                             </Link>
                         </div>
                     )}
                     <div className="relative">
                         <Link to="/cart">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-shopping-cart h-8 w-8" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#ffffff" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-blue-100 hover:text-yellow-300" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                 <path d="M6 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
                                 <path d="M17 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
@@ -79,9 +78,13 @@ const Layout = ({ children }) => {
                 </div>
             </header>
 
-            <main className="p-4">
+            <main className="flex-grow p-4">
                 {children}
             </main>
+
+            <footer className="bg-purple-600 p-4 text-center text-sm text-white">
+                &copy; 2024 Echoes. All rights reserved.
+            </footer>
         </div>
     );
 };

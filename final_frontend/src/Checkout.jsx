@@ -22,7 +22,7 @@ const Checkout = () => {
             }
 
             const data = await response.json();
-            setItems(data.cart_items || []); // Ensure items is always an array
+            setItems(data.cart_items || []);
         } catch (error) {
             setError(error.message);
             console.error('Error fetching cart items:', error);
@@ -52,7 +52,6 @@ const Checkout = () => {
 
             const result = await response.json();
             alert('Checkout successful!');
-            // Refetch cart items to update the state after checkout
             fetchCartItems();
         } catch (error) {
             console.error('Error during checkout:', error);

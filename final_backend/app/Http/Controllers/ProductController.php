@@ -14,8 +14,8 @@ class ProductController extends Controller
 {
     public function index()
     {
+
         $user = auth()->user();
-        
         if ($user->role === 'admin') {
             $products = Product::with('user:id,name,email')->get();
         } else {

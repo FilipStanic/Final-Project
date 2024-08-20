@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/products', [ApiController::class, 'getProducts']);
 Route::get('/products/{imagePath}', [ApiController::class, 'getProductByImagePath']);
-Route::post('/products', [ProductController::class, 'store']);
 
 Route::get('/categories', [CategoryController::class, 'index']);
 
@@ -26,5 +25,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/cart/checkout', [CartController::class, 'proceedToCheckout']);
     Route::delete('/cart', [CartController::class, 'clearCart']);
     Route::delete('/cart/item/{product_id}', [CartController::class, 'removeCartItem']);
-
+    Route::middleware('auth:sanctum')->post('/products', [ApiController::class, 'store']);
 });
