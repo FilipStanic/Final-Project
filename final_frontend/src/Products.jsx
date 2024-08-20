@@ -37,20 +37,23 @@ const Products = () => {
     return (
         <div className="p-5 md:p-10">
             <div className="mb-4">
-                <label htmlFor="category" className="mr-2">Filter by Category:</label>
-                <select
-                    id="category"
-                    value={selectedCategory}
-                    onChange={(e) => setSelectedCategory(e.target.value)}
-                    className="border rounded px-2 py-1 text-black"
-                >
-                    <option value="">All Categories</option>
+                <div className="category-buttons">
+                    <button
+                        className={`category-button ${selectedCategory === '' ? 'active' : ''}`}
+                        onClick={() => setSelectedCategory('')}
+                    >
+                        All Categories
+                    </button>
                     {categories.map((category) => (
-                        <option key={category.id} value={category.id}>
+                        <button
+                            key={category.id}
+                            className={`category-button ${selectedCategory === category.id.toString() ? 'active' : ''}`}
+                            onClick={() => setSelectedCategory(category.id.toString())}
+                        >
                             {category.name.charAt(0).toUpperCase() + category.name.slice(1)}
-                        </option>
+                        </button>
                     ))}
-                </select>
+                </div>
             </div>
 
             {filteredProducts.length === 0 ? (
