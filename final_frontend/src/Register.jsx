@@ -37,9 +37,9 @@ const Register = () => {
     };
 
     return (
-        <div className="flex justify-center items-center min-h-screen">
-            <div className="w-full max-w-md p-8 space-y-6 rounded-lg shadow-md">
-                <h2 className="text-2xl font-bold text-center text-white">Create Account</h2>
+        <div className="flex justify-center items-center min-h-screen ">
+            <div className="w-full max-w-md p-8 space-y-6 rounded-lg shadow-md bg-[#093a74]">
+                <h2 className="text-2xl font-bold text-center text-white">Sign Up</h2>
                 {error && <div className="text-red-500 text-center">{error}</div>}
                 {success && <div className="text-green-500 text-center">{success}</div>}
                 <form onSubmit={handleRegister} className="space-y-4">
@@ -48,7 +48,7 @@ const Register = () => {
                         <input
                             type="text"
                             id="name"
-                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-black"
+                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-300 focus:border-orange-300 text-black"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             required
@@ -59,7 +59,7 @@ const Register = () => {
                         <input
                             type="email"
                             id="email"
-                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-black"
+                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-300 focus:border-orange-300 text-black"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
@@ -70,7 +70,7 @@ const Register = () => {
                         <input
                             type="password"
                             id="password"
-                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-black"
+                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-300 focus:border-orange-300 text-black"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required
@@ -81,7 +81,7 @@ const Register = () => {
                         <input
                             type="password"
                             id="passwordConfirmation"
-                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-black"
+                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-300 focus:border-orange-300 text-black"
                             value={passwordConfirmation}
                             onChange={(e) => setPasswordConfirmation(e.target.value)}
                             required
@@ -93,6 +93,16 @@ const Register = () => {
                     >
                         Register
                     </button>
+
+                    <p className='text-white mt-10 text-center'>
+                    Already have an account?
+                    <a 
+                        className='ml-2 cursor-pointer text-blue-300 hover:underline' 
+                        onClick={() => navigate('/login')}
+                    >
+                        Log in
+                    </a>
+                </p>
                 </form>
             </div>
         </div>

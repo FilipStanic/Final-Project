@@ -49,14 +49,14 @@ const Layout = ({ children }) => {
                             <Link to="/login" className="text-[#093a74] text-md font-medium">
                                 Log In
                             </Link>
-                            <Link to="/register" className="bg-orange-500 hover:bg-orange-700 text-white px-4 py-2 rounded-full text-sm font-medium">
+                            <Link to="/register" className="bg-orange-500 hover:bg-orange-700 text-white px-5 py-3 rounded-full text-l font-bold">
                                 Register
                             </Link>
                         </div>
                     )}
                     <div className="relative">
                         <Link to="/cart">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-white" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" viewBox="0 0 24 24" strokeWidth="1.9" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                 <path d="M6 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
                                 <path d="M17 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
