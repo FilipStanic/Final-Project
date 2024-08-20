@@ -11,7 +11,7 @@ const Layout = ({ children }) => {
 
     return (
         <div className="min-h-screen flex flex-col">
-            <header className="bg-[#093A74] shadow-md p-4 flex justify-between items-center">
+            <header className="p-4 flex justify-between items-center">
                 <div className="flex items-center space-x-4">
                     <Link to="/">
                         <img src={logo} alt="Logo" className="h-10" />
@@ -19,20 +19,34 @@ const Layout = ({ children }) => {
                 </div>
                 <div className="flex items-center space-x-4">
                     {authToken ? (
-                        <div className="profile-dropdown relative" onMouseLeave={() => document.querySelector('.profile-dropdown-content').style.opacity = '0'}>
-                            <button>
-                                Welcome, {user ? user.name : 'User'}
-                            </button>
-                            <div className="profile-dropdown-content absolute right-0 bg-[#093A74] shadow-lg rounded-md mt-2 py-2">
-                                <Link to="/profile" className="block px-4 py-2">My Profile</Link>
-                                <button className="block w-full text-left px-4 py-2 logout-btn" onClick={logout}>
-                                    Logout
+                        <>
+                            <div className="profile-dropdown bg-[#093a74] rounded-full relative">
+                                <button>
+                                    Welcome, {user ? user.name : ''}
                                 </button>
+                                <div className="profile-dropdown-content absolute right-0 shadow-lg rounded-md mt-2 py-2">
+                                    <Link to="/profile" className="block px-4 py-2">My Profile</Link>
+                                    <button className="block w-full text-left px-4 py-2 logout-btn" onClick={logout}>
+                                        Logout
+                                    </button>
+                                </div>
                             </div>
-                        </div>
+                            <button
+                                className="bg-[#6dad63] text-white px-4 py-2 rounded-full text-sm font-medium flex items-center space-x-2"
+                                onClick={() => navigate('/upload')}
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#ffffff" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                    <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" />
+                                    <path d="M7 9l5 -5l5 5" />
+                                    <path d="M12 4l0 12" />
+                                </svg>
+                                <span>Upload Image</span>
+                            </button>
+                        </>
                     ) : (
                         <div className="flex space-x-4 items-center justify-center text-center">
-                            <Link to="/login" className="text-white text-md font-medium">
+                            <Link to="/login" className="text-[#093a74] text-md font-medium">
                                 Log In
                             </Link>
                             <Link to="/register" className="bg-orange-500 hover:bg-orange-700 text-white px-4 py-2 rounded-full text-sm font-medium">
@@ -40,21 +54,9 @@ const Layout = ({ children }) => {
                             </Link>
                         </div>
                     )}
-                    <button
-                        className="bg-[#6dad63] text-white px-4 py-2 rounded-full text-sm font-medium flex items-center space-x-2"
-                        onClick={() => navigate('/upload')}
-                    >
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#ffffff" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                            <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" />
-                            <path d="M7 9l5 -5l5 5" />
-                            <path d="M12 4l0 12" />
-                        </svg>
-                        <span>Upload Image</span>
-                    </button>
                     <div className="relative">
                         <Link to="/cart">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-white" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                 <path d="M6 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
                                 <path d="M17 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
@@ -75,7 +77,7 @@ const Layout = ({ children }) => {
                 {children}
             </main>
 
-            <footer className="bg-[#093A74] p-4 text-center text-sm text-white">
+            <footer className="p-4 text-center text-sm text-[#093a74]">
                 &copy; 2024 Echoes. All rights reserved.
             </footer>
         </div>

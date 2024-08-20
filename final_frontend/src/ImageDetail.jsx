@@ -58,17 +58,17 @@ const ImageDetail = () => {
                     <p>Loading image...</p>
                 )}
             </div>
-            <div className="flex flex-col items-center justify-center w-full md:w-1/2 p-4">
+            <div className="flex flex-col items-center text-center justify-center w-full md:w-1/2 p-4">
                 {product ? (
-                    <div className=" text-white px-8 py-4 mb-4 rounded-lg border w-full max-w-lg">
-                        <h1 className="text-4xl font-bold mb-2 text-left">{product.title}</h1>
-                        <p className="mb-4 italic text-left break-words">{product.description}</p>
-                        <div className="text-left">
-                            <p className="text-xl font-semibold mb-2">Price: ${product.price}</p>
-                            <p>Category: <span className="font-bold text-white">{product.category_id ? categories.find(cat => cat.id === product.category_id)?.name.charAt(0).toUpperCase() + categories.find(cat => cat.id === product.category_id)?.name.slice(1) : 'N/A'}</span></p>
+                    <div className=" text-[#093a74] px-8 py-4 rounded-lg w-full max-w-lg">
+                            <p className="text-xl font-semibold mb-2">${product.price}</p>
+                        <h1 className="text-7xl font-bold font-serif mb-2 ">{product.title}</h1>
+                        <p className="mb-4 text-xl italic break-words">{product.description}</p>
+                        <div>
+                            {/* <p className='font-bold'>Category: <span className="text-[#093a74]">{product.category_id ? categories.find(cat => cat.id === product.category_id)?.name.charAt(0).toUpperCase() + categories.find(cat => cat.id === product.category_id)?.name.slice(1) : 'N/A'}</span></p> */}
                             <button
                                 onClick={() => handleAddToCart(product)}
-                                className="bg-green-500 w-full px-6 py-3 rounded hover:bg-green-600 mb-2 mt-4"
+                                className="bg-[#6dad63] w-full px-6 py-3 rounded hover:bg-[#539748] mb-2 mt-4"
                             >
                                 Add to Cart
                             </button>

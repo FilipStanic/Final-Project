@@ -79,13 +79,11 @@ const Profile = () => {
     };
 
     return (
-        <div className="max-w-7xl mx-auto mt-10 p-6 border rounded-lg">
-            <h1 className="text-2xl font-bold mb-4 text-white">My Profile</h1>
+        <div className="max-w-7xl mx-auto mt-10 p-6 rounded-lg">
+            <h1 className="text-4xl text-center font-bold mb-4 text-text-[#093a74]">My Profile</h1>
             {user ? (
                 <div>
-                    <div className="mb-6">
-                        <p className="text-white"><strong>Name:</strong> {user.name}</p>
-                        <p className="text-white"><strong>Email:</strong> {user.email}</p>
+                    <div className="mb-6 text-center">
                         {user.role !== 'admin' && (
                             <button
                                 className="mt-4 py-2 px-4 bg-red-600 text-white rounded hover:bg-red-700"
@@ -96,14 +94,14 @@ const Profile = () => {
                         )}
                     </div>
 
-                    <h2 className="text-xl font-semibold mb-4 text-white">Your Products</h2>
+                    <h2 className="text-xl font-semibold mb-4 text-[#093a74]'">Your Products</h2>
 
                     {products.length === 0 ? (
                         <p className="text-white">No products yet.</p>
                     ) : (
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                             {products.map(product => (
-                                <div key={product.id} className="bg-indigo-700 rounded overflow-hidden shadow-lg">
+                                <div key={product.id} className="bg-[#093a74] rounded overflow-hidden shadow-lg">
                                     {product.image_path ? (
                                         <img
                                             src={`http://127.0.0.1:8000/storage/${product.image_path}`}
@@ -116,12 +114,12 @@ const Profile = () => {
                                         </div>
                                     )}
                                     <div className="p-4">
-                                        <h3 className="text-white text-lg font-semibold">{product.title}</h3>
-                                        <p className="text-white">{product.description}</p>
-                                        <p className="text-white font-bold mt-2">Price: ${product.price}</p>
+                                        <h3 className="text-white text-xl font-bold border-b">{product.title}</h3>
+                                        <p className="text-white text-sm italic mt-2">{product.description}</p>
+                                        <p className="text-white font-bold mt-2">${product.price}</p>
 
                                         {user.role === 'admin' && (
-                                            <p className="text-sm text-gray-300">
+                                            <p className="text-sm text-gray-300 mt-2">
                                                 Created by: {product.user ? product.user.name : ''}
                                             </p>
                                         )}
