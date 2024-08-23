@@ -8,45 +8,39 @@ const Login = () => {
     const { login } = useAuth();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
+    const [errors, setErrors] = useState({});
 
     const handleLogin = async (e) => {
-        e.preventDefault();    
+        e.preventDefault();
+        setErrors({}); // Clear previous errors
+
         try {
             const response = await axios.post('http://127.0.0.1:8000/api/login', {
                 email,
                 password
             });
+
             const { token } = response.data;
             localStorage.setItem('authToken', token);
             login(token);
             navigate('/');
         } catch (error) {
-            if (error.response && error.response.data) {
-                const serverErrors = error.response.data;
-                if (serverErrors.email) {
-                    setError(serverErrors.email);
-                } else if (serverErrors.password) {
-                    setError(serverErrors.password);
-                } else {
-                    setError('Invalid email or password');
-                }
+            if (error.response && error.response.data.errors) {
+                setErrors(error.response.data.errors);
             } else {
-                setError('An unexpected error occurred');
+                setErrors({ general: 'Invalid email or password' });
             }
         }
     };
-    
-
 
     return (
         <div className="flex justify-center items-center min-h-screen w-full">
             <form onSubmit={handleLogin} className="bg-[#093a74] p-6 rounded-lg w-full max-w-md">
                 <h1 className="text-2xl text-white font-bold mb-5 text-center">Login</h1>
 
-                {error && (
+                {errors.general && (
                     <p className="text-red-600 text-center mb-4">
-                        {error}
+                        {errors.general}
                     </p>
                 )}
 
@@ -60,6 +54,7 @@ const Login = () => {
                         className="w-full p-2 border rounded text-black text-md"
                         required
                     />
+                    {errors.email && <p className="text-red-500 text-sm">{errors.email[0]}</p>}
                 </div>
                 <div className="mb-4">
                     <label htmlFor="password" className="block text-white mb-2 text-md">Password</label>
@@ -71,6 +66,7 @@ const Login = () => {
                         className="w-full p-2 border rounded text-black text-md"
                         required
                     />
+                    {errors.password && <p className="text-red-500 text-sm">{errors.password[0]}</p>}
                 </div>
                 <button
                     type="submit"
@@ -90,7 +86,6 @@ const Login = () => {
                 </p>
             </form>
         </div>
-
     );
 };
 

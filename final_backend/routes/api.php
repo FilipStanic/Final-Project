@@ -1,5 +1,6 @@
 <?php
 
+
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\CartController;
@@ -10,7 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/products', [ApiController::class, 'getProducts']);
-Route::get('/products/{imagePath}', [ApiController::class, 'getProductByImagePath']);
+Route::get('/products/image/{imagePath}', [ApiController::class, 'getProductByImagePath']); // Modified
 
 Route::get('/categories', [CategoryController::class, 'index']);
 Route::get('/categories/{category}/tags', [TagController::class, 'tagsByCategory']);
@@ -28,5 +29,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/cart/checkout', [CartController::class, 'proceedToCheckout']);
     Route::delete('/cart', [CartController::class, 'clearCart']);
     Route::delete('/cart/item/{product_id}', [CartController::class, 'removeCartItem']);
-    Route::middleware('auth:sanctum')->post('/products', [ApiController::class, 'store']);
+    Route::post('/products', [ApiController::class, 'store']);
+    Route::delete('/products/{id}', [ApiController::class, 'deleteProduct']);
+    Route::put('/products/{id}', [ApiController::class, 'updateProduct']);
+    Route::get('/products/{id}', [ApiController::class, 'getProductById']);
 });

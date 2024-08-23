@@ -7,14 +7,14 @@ const Register = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [passwordConfirmation, setPasswordConfirmation] = useState('');
-    const [error, setError] = useState(null);
+    const [errors, setErrors] = useState({});
     const [success, setSuccess] = useState(null);
     const navigate = useNavigate();
 
     const handleRegister = async (e) => {
         e.preventDefault();
-        setError(null);
-
+        setErrors({});
+        
         try {
             const response = await axios.post('http://127.0.0.1:8000/api/register', {
                 name,
@@ -28,19 +28,19 @@ const Register = () => {
                 navigate('/success');
             }, 1500);
         } catch (error) {
-            if (error.response && error.response.data) {
-                setError(error.response.data.message || 'Registration failed. Please try again.');
+            if (error.response && error.response.data.errors) {
+                setErrors(error.response.data.errors);
             } else {
-                setError('Something went wrong. Please try again later.');
+                setErrors({ general: 'Something went wrong. Please try again later.' });
             }
         }
     };
 
     return (
-        <div className="flex justify-center items-center min-h-screen ">
+        <div className="flex justify-center items-center min-h-screen">
             <div className="w-full max-w-md p-8 space-y-6 rounded-lg shadow-md bg-[#093a74]">
                 <h2 className="text-2xl font-bold text-center text-white">Sign Up</h2>
-                {error && <div className="text-red-500 text-center">{error}</div>}
+                {errors.general && <div className="text-red-500 text-center">{errors.general}</div>}
                 {success && <div className="text-green-500 text-center">{success}</div>}
                 <form onSubmit={handleRegister} className="space-y-4">
                     <div>
@@ -53,6 +53,7 @@ const Register = () => {
                             onChange={(e) => setName(e.target.value)}
                             required
                         />
+                        {errors.name && <p className="text-red-500 text-sm">{errors.name[0]}</p>}
                     </div>
                     <div>
                         <label htmlFor="email" className="block text-sm font-medium text-white">Email</label>
@@ -64,6 +65,7 @@ const Register = () => {
                             onChange={(e) => setEmail(e.target.value)}
                             required
                         />
+                        {errors.email && <p className="text-red-500 text-sm">{errors.email[0]}</p>}
                     </div>
                     <div>
                         <label htmlFor="password" className="block text-sm font-medium text-white">Password</label>
@@ -75,6 +77,7 @@ const Register = () => {
                             onChange={(e) => setPassword(e.target.value)}
                             required
                         />
+                        {errors.password && <p className="text-red-500 text-sm">{errors.password[0]}</p>}
                     </div>
                     <div>
                         <label htmlFor="passwordConfirmation" className="block text-sm font-medium text-white">Confirm Password</label>
@@ -86,6 +89,7 @@ const Register = () => {
                             onChange={(e) => setPasswordConfirmation(e.target.value)}
                             required
                         />
+                        {errors.password_confirmation && <p className="text-red-500 text-sm">{errors.password_confirmation[0]}</p>}
                     </div>
                     <button
                         type="submit"
@@ -94,15 +98,15 @@ const Register = () => {
                         Register
                     </button>
 
-                    <p className='text-white mt-10 text-center'>
-                    Already have an account?
-                    <a 
-                        className='ml-2 cursor-pointer text-blue-300 hover:underline' 
-                        onClick={() => navigate('/login')}
-                    >
-                        Log in
-                    </a>
-                </p>
+                    <p className="text-white mt-10 text-center">
+                        Already have an account?
+                        <a
+                            className="ml-2 cursor-pointer text-blue-300 hover:underline"
+                            onClick={() => navigate('/login')}
+                        >
+                            Log in
+                        </a>
+                    </p>
                 </form>
             </div>
         </div>

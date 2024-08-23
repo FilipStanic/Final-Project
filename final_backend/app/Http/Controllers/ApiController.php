@@ -19,6 +19,17 @@ class ApiController extends Controller
         return response()->json($products);
     }
 
+    public function getProductById($id)
+    {
+        $product = Product::with('tags')->find($id);
+
+        if (!$product) {
+            return response()->json(['error' => 'Product not found'], 404);
+        }
+
+        return response()->json($product);
+    }
+
 
     public function getUserProducts(Request $request)
     {
@@ -45,6 +56,52 @@ class ApiController extends Controller
 
         return response()->json($product);
     }
+
+
+    public function deleteProduct($id)
+    {
+        try {
+            $product = Product::findOrFail($id);
+
+            if ($product->user_id !== Auth::id()) {
+                return response()->json(['message' => 'Unauthorized'], 403);
+            }
+
+            $product->delete();
+
+            return response()->json(['message' => 'Product deleted successfully'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Something went wrong', 'details' => $e->getMessage()], 500);
+        }
+    }
+
+    public function updateProduct(Request $request, $id)
+    {
+        $validatedData = $request->validate([
+            'title' => 'required|string|max:100|regex:/^(\S+\s+?){0,2}\S+$/',
+            'description' => 'required|string|max:100',
+            'price' => 'required|numeric',
+            'category_id' => 'required|exists:categories,id',
+            'tags' => 'sometimes|array',
+            'tags.*' => 'exists:tags,id'
+        ]);
+
+        $product = Product::findOrFail($id);
+
+        if ($product->user_id !== Auth::id()) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
+        $product->update($validatedData);
+
+        if (isset($validatedData['tags'])) {
+            $product->tags()->sync($validatedData['tags']);
+        }
+
+        return response()->json(['message' => 'Product updated successfully', 'product' => $product], 200);
+    }
+
+
 
     public function login(Request $request)
     {
@@ -75,7 +132,7 @@ class ApiController extends Controller
     {
         try {
             $validatedData = $request->validate([
-                'name' => 'required|string|max:255',
+                'name' => 'required|string|max:35',
                 'email' => 'required|string|email|max:255|unique:users',
                 'password' => 'required|string|min:8|confirmed',
             ]);
@@ -125,14 +182,18 @@ class ApiController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'title' => 'required|string|max:100',
-            'description' => 'nullable|string|max:100',
+            'title' => 'required|string|max:100|regex:/^(\S+\s+?){0,2}\S+$/',
+            'description' => 'required|string|max:100',
             'price' => 'required|numeric',
             'image' => 'required|image|max:10000',
             'category_id' => 'required|exists:categories,id',
             'tags' => 'sometimes|array',
             'tags.*' => 'exists:tags,id'
         ]);
+
+        if (str_word_count($request->title) > 3) {
+            return response()->json(['errors' => ['title' => 'Title must not exceed 3 words.']], 422);
+        }
 
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('images', 'public');
@@ -148,6 +209,8 @@ class ApiController extends Controller
             'category_id' => $validatedData['category_id'],
             'user_id' => Auth::id(),
         ]);
+
+
 
         if (isset($validatedData['tags'])) {
             $product->tags()->attach($validatedData['tags']);

@@ -5,7 +5,8 @@ import { Link } from 'react-router-dom';
 const Products = () => {
     const [products, setProducts] = useState([]);
     const [categories, setCategories] = useState([]);
-    const [tags, setTags] = useState([]);
+    const [allTags, setAllTags] = useState([]);
+    const [filteredTags, setFilteredTags] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState('');
     const [selectedTags, setSelectedTags] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
@@ -15,9 +16,7 @@ const Products = () => {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                console.log('Fetching products...');
                 const response = await axios.get('http://127.0.0.1:8000/api/products');
-                console.log('Products fetched:', response.data);
                 setProducts(response.data);
             } catch (error) {
                 console.error('Error fetching products:', error);
@@ -26,9 +25,7 @@ const Products = () => {
 
         const fetchCategories = async () => {
             try {
-                console.log('Fetching categories...');
                 const response = await axios.get('http://127.0.0.1:8000/api/categories');
-                console.log('Categories fetched:', response.data);
                 setCategories(response.data);
             } catch (error) {
                 console.error('Error fetching categories:', error);
@@ -37,10 +34,9 @@ const Products = () => {
 
         const fetchTags = async () => {
             try {
-                console.log('Fetching tags...');
                 const response = await axios.get('http://127.0.0.1:8000/api/tags');
-                console.log('Tags fetched:', response.data);
-                setTags(response.data);
+                setAllTags(response.data);
+                setFilteredTags(response.data); // Set all tags initially
             } catch (error) {
                 console.error('Error fetching tags:', error);
             }
@@ -51,15 +47,31 @@ const Products = () => {
         fetchTags();
     }, []);
 
+    useEffect(() => {
+        // Fetch and filter tags based on selected category
+        const fetchFilteredTags = async () => {
+            if (selectedCategory) {
+                try {
+                    const response = await axios.get(`http://127.0.0.1:8000/api/categories/${selectedCategory}/tags`);
+                    setFilteredTags(response.data);
+                } catch (error) {
+                    console.error('Error fetching filtered tags:', error);
+                }
+            } else {
+                setFilteredTags(allTags); // Show all tags when no category is selected
+            }
+        };
+
+        fetchFilteredTags();
+    }, [selectedCategory, allTags]);
+
     const toggleLike = (id) => {
-        console.log(`Toggling like for product with id ${id}`);
         setProducts(products.map(product =>
             product.id === id ? { ...product, liked: !product.liked } : product
         ));
     };
 
     const handleTagSelection = (tagId) => {
-        console.log(`Tag selection changed for tagId ${tagId}`);
         setSelectedTags(prevTags =>
             prevTags.includes(tagId)
                 ? prevTags.filter(tag => tag !== tagId)
@@ -69,47 +81,33 @@ const Products = () => {
 
     const filteredProducts = products.filter(product => {
         const productTags = product.tags || [];
-        console.log(`Product: ${product.title} with Category ID: ${product.category_id} and Tags:`, productTags);
-
         const categoryMatch = selectedCategory === '' || product.category_id === parseInt(selectedCategory);
         const searchTermMatch = product.title.toLowerCase().includes(searchTerm.toLowerCase());
         const tagMatch = selectedTags.length === 0 || selectedTags.every(tagId => {
-            const match = productTags.some(tag => {
-                const isMatch = tag.id === parseInt(tagId);
-                console.log(`Checking if tag ${tagId} exists in product '${product.title}': ${isMatch}`);
-                return isMatch;
-            });
-            console.log(`Tag ${tagId} match result for product '${product.title}': ${match}`);
-            return match;
+            return productTags.some(tag => tag.id === parseInt(tagId));
         });
 
-        const included = categoryMatch && searchTermMatch && tagMatch;
-        console.log(`Product '${product.title}' included in filtered results: ${included}`);
-        return included;
+        return categoryMatch && searchTermMatch && tagMatch;
     });
-
 
     const visibleProducts = filteredProducts.slice(0, displayedProducts);
 
     const handleShowMore = () => {
-        console.log('Showing more products...');
         setDisplayedProducts(prev => prev + 20);
     };
 
     const toggleSecondAside = () => {
-        console.log('Toggling second aside...');
         setIsSecondAsideOpen(!isSecondAsideOpen);
     };
 
     return (
         <div className="flex p-4">
             <div className='w-14 p-4 -ml-4 -mt-4 -mb-4 bg-white bg-opacity-40 flex flex-col items-center'>
-                <aside className="flex-none h-screen ">
+                <aside className="flex-none h-screen">
                     <nav className="space-y-4">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
-                            className={`icon icon-tabler icon-tabler-adjustments cursor-pointer ${isSecondAsideOpen ? 'bg-gray-700 text-white  rounded' : 'text-black'
-                                }`}
+                            className={`icon icon-tabler icon-tabler-adjustments cursor-pointer ${isSecondAsideOpen ? 'bg-gray-700 text-white  rounded' : 'text-black'}`}
                             width="32"
                             height="40"
                             viewBox="0 0 24 24"
@@ -139,18 +137,19 @@ const Products = () => {
                     <aside className="flex-none h-screen">
                         <nav className="space-y-4">
                             <h3 className="text-lg font-bold mb-4">Filter by Tags</h3>
-                            <div className="space-y-2">
-                                {tags.map(tag => (
-                                    <label key={tag.id} className="flex items-center">
-                                        <input
-                                            type="checkbox"
-                                            value={tag.id}
-                                            onChange={() => handleTagSelection(tag.id)}
-                                            checked={selectedTags.includes(tag.id)}
-                                            className="mr-2"
-                                        />
+                            <div className="space-y-2 space-x-1">
+                                {filteredTags.map(tag => (
+                                    <button
+                                        key={tag.id}
+                                        type="button"
+                                        onClick={() => handleTagSelection(tag.id)}
+                                        className={`px-3 py-1 rounded-full border ${selectedTags.includes(tag.id) ? 'bg-gray-600 text-white border-gray-400' : 'bg-gray-400 text-white border-gray-300'}`}
+                                    >
                                         {tag.name}
-                                    </label>
+                                        {selectedTags.includes(tag.id) && (
+                                            <span className="ml-2 text-gray-500">✕</span>
+                                        )}
+                                    </button>
                                 ))}
                             </div>
                         </nav>
@@ -229,7 +228,6 @@ const Products = () => {
                                         )}
                                     </button>
                                 </div>
-
                             </div>
                         ))}
                     </div>

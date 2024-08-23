@@ -15,6 +15,7 @@ import RegistrationSuccess from './RegistrationSuccess';
 import Checkout from './Checkout';
 import UploadImg from './UploadImg';
 import MainPage from './MainPage';
+import EditProduct from './EditProduct';
 
 const App = () => {
     return (
@@ -33,6 +34,7 @@ const App = () => {
                             <Route path="/profile" element={<Profile />} />
                             <Route path="/checkout" element={<Checkout />} />
                             <Route path="/upload" element={<UploadImg />} />
+                            <Route path="/edit-product/:id" element={<EditProduct />} />
                         </Routes>
                         <ToastContainer />
                     </Layout>

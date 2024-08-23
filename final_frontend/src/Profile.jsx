@@ -33,37 +33,19 @@ const Profile = () => {
         }
     }, [authToken, user]);
 
-    const deleteUserAccount = async () => {
+    const deleteProduct = async (id) => {
         try {
-            if (!authToken) {
-                throw new Error('No token found. Please log in.');
-            }
-
-            await axios.delete(`http://127.0.0.1:8000/api/user/${user.id}`, {
+            await axios.delete(`http://127.0.0.1:8000/api/products/${id}`, {
                 headers: { Authorization: `Bearer ${authToken}` }
             });
-
-            Swal.fire({
-                title: 'Deleted!',
-                text: 'Your account has been deleted.',
-                icon: 'success',
-                confirmButtonText: 'OK',
-            }).then(() => {
-                logout();
-                navigate('/');
-            });
+            setProducts(products.filter(product => product.id !== id));
+            Swal.fire('Deleted!', 'Product has been deleted.', 'success');
         } catch (error) {
-            console.error('Error deleting user account:', error);
-            Swal.fire({
-                title: 'Error!',
-                text: error.response?.data?.message || 'There was an error deleting your account.',
-                icon: 'error',
-                confirmButtonText: 'OK',
-            });
+            Swal.fire('Error!', 'There was an error deleting the product.', 'error');
         }
     };
 
-    const handleDeleteAccount = () => {
+    const handleDeleteProduct = (id) => {
         Swal.fire({
             title: 'Are you sure?',
             text: "You won't be able to revert this!",
@@ -74,7 +56,7 @@ const Profile = () => {
             confirmButtonText: 'Yes, delete it!',
         }).then((result) => {
             if (result.isConfirmed) {
-                deleteUserAccount();
+                deleteProduct(id);
             }
         });
     };
@@ -83,7 +65,7 @@ const Profile = () => {
         <div className="max-w-7xl mx-auto mt-10 p-6 rounded-lg">
             {user ? (
                 <div>
-                    <h1 className="text-4xl text-center font-bold mb-4 text-text-[#093a74]">My Profile</h1>
+                    <h1 className="text-4xl text-center font-bold mb-4 text-[#093a74]">My Profile</h1>
                     <div className="mb-6 text-center">
                         {user.role !== 'admin' && (
                             <button
@@ -95,14 +77,34 @@ const Profile = () => {
                         )}
                     </div>
 
-                    <h2 className="text-xl font-semibold mb-4 text-[#093a74]'">Your Products</h2>
+                    <h2 className="text-xl font-semibold mb-4 text-[#093a74]">Your Products</h2>
 
                     {products.length === 0 ? (
                         <p className="text-white">No products yet.</p>
                     ) : (
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                             {products.map(product => (
-                                <div key={product.id} className="bg-[#093a74] rounded overflow-hidden shadow-lg">
+                                <div key={product.id} className="relative bg-[#093a74] rounded overflow-hidden shadow-lg">
+                                    <Link to={`/edit-product/${product.id}`} className="absolute top-2 right-2 bg-blue-500 text-white p-2 rounded-full">
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-pencil" width="24" height="24" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#ffffff" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                            <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+                                            <path d="M13.5 6.5l4 4" />
+                                        </svg>
+                                    </Link>
+                                    <button
+                                        onClick={() => handleDeleteProduct(product.id)}
+                                        className="absolute bottom-2 right-2 bg-red-500 text-white p-2 rounded-full"
+                                    >
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-trash" width="24" height="24" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#ffffff" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                            <path d="M4 7l16 0" />
+                                            <path d="M10 11l0 6" />
+                                            <path d="M14 11l0 6" />
+                                            <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />
+                                            <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
+                                        </svg>
+                                    </button>
                                     {product.image_path ? (
                                         <img
                                             src={`http://127.0.0.1:8000/storage/${product.image_path}`}
