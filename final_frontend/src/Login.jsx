@@ -11,7 +11,7 @@ const Login = () => {
     const [error, setError] = useState('');
 
     const handleLogin = async (e) => {
-        e.preventDefault();
+        e.preventDefault();    
         try {
             const response = await axios.post('http://127.0.0.1:8000/api/login', {
                 email,
@@ -22,15 +22,34 @@ const Login = () => {
             login(token);
             navigate('/');
         } catch (error) {
-            setError('Invalid email or password');
+            if (error.response && error.response.data) {
+                const serverErrors = error.response.data;
+                if (serverErrors.email) {
+                    setError(serverErrors.email);
+                } else if (serverErrors.password) {
+                    setError(serverErrors.password);
+                } else {
+                    setError('Invalid email or password');
+                }
+            } else {
+                setError('An unexpected error occurred');
+            }
         }
     };
+    
+
 
     return (
         <div className="flex justify-center items-center min-h-screen w-full">
-            {error && <p className="text-red-600 mb-4">{error}</p>}
             <form onSubmit={handleLogin} className="bg-[#093a74] p-6 rounded-lg w-full max-w-md">
                 <h1 className="text-2xl text-white font-bold mb-5 text-center">Login</h1>
+
+                {error && (
+                    <p className="text-red-600 text-center mb-4">
+                        {error}
+                    </p>
+                )}
+
                 <div className="mb-4">
                     <label htmlFor="email" className="block text-white mb-2 text-md">Email</label>
                     <input
@@ -62,8 +81,8 @@ const Login = () => {
 
                 <p className='text-white mt-8 text-center text-md'>
                     Don't have an account?
-                    <a 
-                        className='ml-2 cursor-pointer text-blue-300 hover:underline' 
+                    <a
+                        className='ml-2 cursor-pointer text-blue-300 hover:underline'
                         onClick={() => navigate('/register')}
                     >
                         Sign up
@@ -71,6 +90,7 @@ const Login = () => {
                 </p>
             </form>
         </div>
+
     );
 };
 

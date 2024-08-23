@@ -14,6 +14,7 @@ import Register from './Register';
 import RegistrationSuccess from './RegistrationSuccess';
 import Checkout from './Checkout';
 import UploadImg from './UploadImg';
+import MainPage from './MainPage';
 
 const App = () => {
     return (
@@ -22,7 +23,8 @@ const App = () => {
                 <CartProvider>
                     <Layout>
                         <Routes>
-                            <Route path="/" element={<Products />} />
+                            <Route path="/" element={<MainPage />} />
+                            <Route path="/products" element={<Products />} />
                             <Route path="/image/*" element={<ImageDetail />} />
                             <Route path="/cart" element={<Cart />} />
                             <Route path="/login" element={<Login />} />

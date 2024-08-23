@@ -3,9 +3,10 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 
-
 const UploadImg = () => {
     const [categories, setCategories] = useState([]);
+    const [tags, setTags] = useState([]);
+    const [selectedTags, setSelectedTags] = useState([]);
     const [formData, setFormData] = useState({
         title: '',
         description: '',
@@ -14,21 +15,25 @@ const UploadImg = () => {
         category_id: ''
     });
 
-
     const navigate = useNavigate();
 
     useEffect(() => {
-        const fetchCategories = async () => {
+        const fetchCategoriesAndTags = async () => {
             try {
-                const response = await axios.get('http://127.0.0.1:8000/api/categories');
-                setCategories(response.data);
+                const categoryResponse = await axios.get('http://127.0.0.1:8000/api/categories');
+                setCategories(categoryResponse.data);
+
+                if (formData.category_id) {
+                    const tagResponse = await axios.get(`http://127.0.0.1:8000/api/categories/${formData.category_id}/tags`);
+                    setTags(tagResponse.data);
+                }
             } catch (error) {
-                console.error('Error fetching categories:', error);
+                console.error('Error fetching categories or tags:', error);
             }
         };
 
-        fetchCategories();
-    }, []);
+        fetchCategoriesAndTags();
+    }, [formData.category_id]);
 
     const handleChange = (e) => {
         const { name, value, type, files } = e.target;
@@ -36,6 +41,15 @@ const UploadImg = () => {
             ...prevData,
             [name]: type === 'file' ? files[0] : value
         }));
+    };
+
+    const handleTagSelection = (e) => {
+        const { value, checked } = e.target;
+        if (checked) {
+            setSelectedTags([...selectedTags, value]);
+        } else {
+            setSelectedTags(selectedTags.filter((tag) => tag !== value));
+        }
     };
 
     const handleSubmit = async (e) => {
@@ -47,33 +61,33 @@ const UploadImg = () => {
         data.append('price', formData.price);
         data.append('image', formData.image);
         data.append('category_id', formData.category_id);
-
+    
+        selectedTags.forEach(tag => {
+            data.append('tags[]', tag);
+        });
     
         try {
             const response = await axios.post('http://127.0.0.1:8000/api/products', data, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
-                    Authorization: `Bearer ${localStorage.getItem('authToken')}`
-                }
+                    Authorization: `Bearer ${localStorage.getItem('authToken')}`,
+                },
             });
-            
-
+    
+            console.log('Product created:', response.data);
+    
             Swal.fire({
                 title: 'Success!',
                 text: 'Product was created successfully!',
                 icon: 'success',
-                confirmButtonText: 'OK'
+                confirmButtonText: 'OK',
             }).then(() => {
-                navigate('/');
+                navigate('/products');
             });
-
-
         } catch (error) {
             console.error('Error uploading product:', error);
         }
-    };
-    
-
+    };    
 
     return (
         <div className="p-6 rounded-lg w-11/12 max-w-md mx-auto">
@@ -90,7 +104,6 @@ const UploadImg = () => {
                         required
                         className="border text-black border-gray-300 rounded-md p-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
-                    <small className="">Maximum 3 words, 100 characters</small>
                 </div>
 
                 <div className="mb-4">
@@ -101,7 +114,6 @@ const UploadImg = () => {
                         onChange={handleChange}
                         className="border border-gray-300 rounded-md p-2 w-full text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
-                    <small className="">Maximum 100 characters</small>
                 </div>
 
                 <div className="mb-4">
@@ -113,8 +125,6 @@ const UploadImg = () => {
                         onChange={handleChange}
                         required
                         className="border text-black border-gray-300 rounded-md p-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        placeholder="Enter price"
-                        step="0.01"
                     />
                 </div>
 
@@ -145,6 +155,21 @@ const UploadImg = () => {
                             </option>
                         ))}
                     </select>
+                </div>
+
+                <div className="mb-4">
+                    <label className="block font-bold mb-2">Tags:</label>
+                    {tags.map((tag) => (
+                        <div key={tag.id} className="flex items-center mb-2">
+                            <input
+                                type="checkbox"
+                                value={tag.id}
+                                onChange={handleTagSelection}
+                                className="mr-2"
+                            />
+                            <label className="text-black">{tag.name}</label>
+                        </div>
+                    ))}
                 </div>
 
                 <button

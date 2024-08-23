@@ -8,12 +8,9 @@ body {
     padding: 0;
 }
 
-
-
 h1, h2, h3, h4 {
     font-family: 'Quicksand', sans-serif;
 }
-
 
 header {
     padding: 20px;
@@ -25,8 +22,6 @@ header {
 header img {
     height: 50px;
 }
-
-
 
 button, .btn {
     color: rgb(255, 255, 255);
@@ -40,60 +35,6 @@ button, .btn {
 
 button:hover, .btn:hover {
     transform: scale(1.01);
-}
-
-
-.profile-dropdown {
-    position: relative;
-    display: inline-block;
-}
-
-.profile-dropdown-content {
-    display: none;
-    position: absolute;
-    right: 0;
-    background-color: rgb(9, 58, 116);
-    min-width: 160px;
-    border-radius: 12px;
-    z-index: 1;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
-    opacity: 0;
-    visibility: hidden;
-}
-
-.profile-dropdown:hover .profile-dropdown-content {
-    display: block;
-    opacity: 1;
-    visibility: visible;
-}
-
-.profile-dropdown-content a, .profile-dropdown-content button {
-    color: rgb(255, 255, 255);
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
-    font-family: 'Oswald', sans-serif;
-    border-radius: 10px;
-}
-
-
-.profile-dropdown-content a:hover {
-    background-color: rgb(49, 102, 180);
-}
-
-
-
-.profile-dropdown button {
-    color: white;
-}
-
-.profile-dropdown-content {
-    transition: opacity 0.3s ease, visibility 0.3s ease;
-}
-
-
-.profile-dropdown-content {
-    transition-delay: 1s;
 }
 
 .category-buttons {
@@ -146,6 +87,9 @@ button:hover, .btn:hover {
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
 }
 
+.group:hover .absolute {
+    opacity: 1;
+}
 
 footer {
     text-align: center;
@@ -154,18 +98,4 @@ footer {
 }
 
 
-.logout-btn {
-    background-color: rgb(220, 53, 69);
-    padding: 10px 20px;
-    border-radius: 25px;
-    font-family: 'Oswald', sans-serif;
-    font-size: 16px;
-    color: white;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s ease-in-out;
-}
 
-.logout-btn:hover {
-    background-color: rgb(200, 45, 60);
-}

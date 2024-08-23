@@ -14,7 +14,7 @@ class ApiController extends Controller
     public function getProducts()
     {
 
-        $products = Product::with('user:id,name,email')->get();
+        $products = Product::with('user:id,name,email', 'tags:id,name')->get();
 
         return response()->json($products);
     }
@@ -124,22 +124,21 @@ class ApiController extends Controller
 
     public function store(Request $request)
     {
-
         $validatedData = $request->validate([
             'title' => 'required|string|max:100',
             'description' => 'nullable|string|max:100',
             'price' => 'required|numeric',
             'image' => 'required|image|max:10000',
             'category_id' => 'required|exists:categories,id',
+            'tags' => 'sometimes|array',
+            'tags.*' => 'exists:tags,id'
         ]);
-
 
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('images', 'public');
         } else {
             return response()->json(['error' => 'Image not uploaded correctly'], 400);
         }
-
 
         $product = Product::create([
             'title' => $validatedData['title'],
@@ -150,8 +149,13 @@ class ApiController extends Controller
             'user_id' => Auth::id(),
         ]);
 
+        if (isset($validatedData['tags'])) {
+            $product->tags()->attach($validatedData['tags']);
+        }
+
         return response()->json(['message' => 'Product created successfully!', 'product' => $product], 201);
     }
+
 
 
 

@@ -46,6 +46,8 @@ const ImageDetail = () => {
     };
 
     return (
+        <div className='p-4'>
+                    
         <div className="flex flex-col md:flex-row items-center justify-center h-screen">
             <div className="flex justify-center w-full md:w-1/2 p-4">
                 {imageUrl ? (
@@ -65,7 +67,6 @@ const ImageDetail = () => {
                         <h1 className="text-7xl font-bold font-serif mb-2 ">{product.title}</h1>
                         <p className="mb-4 text-xl italic break-words">{product.description}</p>
                         <div>
-                            {/* <p className='font-bold'>Category: <span className="text-[#093a74]">{product.category_id ? categories.find(cat => cat.id === product.category_id)?.name.charAt(0).toUpperCase() + categories.find(cat => cat.id === product.category_id)?.name.slice(1) : 'N/A'}</span></p> */}
                             <button
                                 onClick={() => handleAddToCart(product)}
                                 className="bg-[#6dad63] w-full px-6 py-3 rounded hover:bg-[#539748] mb-2 mt-4"
@@ -78,6 +79,7 @@ const ImageDetail = () => {
                     <p>No product details found.</p>
                 )}
             </div>
+        </div>
         </div>
     );
 };

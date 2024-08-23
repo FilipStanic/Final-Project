@@ -3,6 +3,7 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 import { useAuth } from './AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const Profile = () => {
     const { user, logout, authToken } = useAuth();
@@ -80,9 +81,9 @@ const Profile = () => {
 
     return (
         <div className="max-w-7xl mx-auto mt-10 p-6 rounded-lg">
-            <h1 className="text-4xl text-center font-bold mb-4 text-text-[#093a74]">My Profile</h1>
             {user ? (
                 <div>
+                    <h1 className="text-4xl text-center font-bold mb-4 text-text-[#093a74]">My Profile</h1>
                     <div className="mb-6 text-center">
                         {user.role !== 'admin' && (
                             <button
@@ -130,7 +131,13 @@ const Profile = () => {
                     )}
                 </div>
             ) : (
-                <p className="text-white">Loading profile...</p>
+                <div className='flex flex-col items-center'>
+                    <p className="text-[#093a74] text-center text-3xl">You are not logged in!</p>
+                    <Link to="/login" className="text-white bg-[#093a74] p-3 mt-8 rounded-2xl text-md font-medium">
+                        Log In
+                    </Link>
+                </div>
+
             )}
         </div>
     );
