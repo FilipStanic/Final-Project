@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useCart } from './CartContext';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
@@ -12,12 +12,12 @@ const Cart = () => {
     const updateQuantity = (item, delta) => {
         setCartItems(prevItems => {
             const newItems = prevItems.map(i => {
-                if (i.title === item.title) {
-                    return { ...i, quantity: Math.max(0, i.quantity + delta) };
+                if (i.id === item.id) {
+                    return { ...i, quantity: Math.max(1, i.quantity + delta) };
                 }
                 return i;
             });
-            return newItems.filter(i => i.quantity > 0);
+            return newItems;
         });
     };
 
@@ -33,13 +33,21 @@ const Cart = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    await axios.delete('http://127.0.0.1:8000/api/cart', {
+                    const response = await axios.delete('http://127.0.0.1:8000/api/cart', {
                         headers: {
                             Authorization: `Bearer ${token}`
                         }
                     });
-                    setCartItems([]);
+    
+                    if (response.status === 200) {
+                        setCartItems([]);
+                        localStorage.removeItem('cartItems');
+                        Swal.fire('Cleared!', 'Your cart has been cleared.', 'success');
+                    } else {
+                        Swal.fire('Error', 'There was an error clearing your cart.', 'error');
+                    }
                 } catch (error) {
+                    console.error('Error clearing cart:', error);
                     Swal.fire('Error', 'There was an error clearing your cart.', 'error');
                 }
             }
@@ -81,22 +89,16 @@ const Cart = () => {
 
     const handleProceedToCheckout = async () => {
         try {
-            const itemsToUpdate = cartItems.map(item => {
-                if (!item.id) {
-                    Swal.fire('Error', 'Product ID is missing for some items.', 'error');
-                    return null;
-                }
-                return {
-                    product_id: item.id,
-                    quantity: item.quantity
-                };
-            }).filter(Boolean);
-
+            const itemsToUpdate = cartItems.map(item => ({
+                product_id: item.id,
+                quantity: item.quantity
+            }));
+    
             if (itemsToUpdate.length === 0) {
-                Swal.fire('Error', 'No valid items to update in the cart.', 'error');
+                Swal.fire('Error', 'No items in the cart to proceed.', 'error');
                 return;
             }
-
+    
             await axios.post('http://127.0.0.1:8000/api/cart/update', {
                 items: itemsToUpdate
             }, {
@@ -104,25 +106,33 @@ const Cart = () => {
                     Authorization: `Bearer ${token}`
                 }
             });
-
-            await axios.post('http://127.0.0.1:8000/api/cart/checkout', {
-                items: itemsToUpdate
-            }, {
+    
+            await axios.post('http://127.0.0.1:8000/api/cart/checkout', {}, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
             });
+
+            setCartItems([]);
+            localStorage.removeItem('cartItems');
+    
+            Swal.fire('Success', 'Checkout completed and cart cleared.', 'success');
             navigate('/checkout');
         } catch (error) {
+            console.error('Error during checkout:', error);
             Swal.fire('Error', 'There was an error processing your checkout.', 'error');
         }
     };
+    
 
-    const totalPrice = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+    const totalPrice = cartItems.reduce((total, item) => {
+        const itemPrice = parseFloat(item.price) || 0;
+        return total + (itemPrice * item.quantity);
+    }, 0);
 
     return (
         <div className='p-4'>
-            <div className="p-4 text[#093a74] rounded-lg border-2 border-[#093a74]">
+            <div className="p-4 text-[#093a74] rounded-lg border-2 border-[#093a74]">
                 <h1 className="text-2xl font-bold mb-4">Your Cart</h1>
                 {cartItems.length === 0 ? (
                     <p>Your cart is empty.</p>

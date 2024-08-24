@@ -16,22 +16,23 @@ const Profile = () => {
                 console.error('No authentication token found.');
                 return;
             }
-
+    
             try {
                 const response = await axios.get('http://127.0.0.1:8000/api/user/products', {
                     headers: { Authorization: `Bearer ${authToken}` }
                 });
-
+    
                 setProducts(response.data);
             } catch (error) {
                 console.error('Error fetching user products:', error);
             }
         };
-
+    
         if (authToken) {
             fetchUserProducts();
         }
     }, [authToken, user]);
+    
 
     const deleteProduct = async (id) => {
         try {
@@ -60,6 +61,32 @@ const Profile = () => {
             }
         });
     };
+
+    const handleDeleteAccount = () => {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "This action will permanently delete your account and cannot be undone!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, delete my account!',
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    await axios.delete(`http://127.0.0.1:8000/api/user/${user.id}`, {
+                        headers: { Authorization: `Bearer ${authToken}` },
+                    });
+                    Swal.fire('Deleted!', 'Your account has been deleted.', 'success');
+                    logout();
+                    navigate('/');
+                } catch (error) {
+                    Swal.fire('Error!', 'There was an error deleting your account.', 'error');
+                }
+            }
+        });
+    };
+    
 
     return (
         <div className="max-w-7xl mx-auto mt-10 p-6 rounded-lg">

@@ -26,7 +26,10 @@ Route::middleware('auth:sanctum')->get('/user/products', [ApiController::class, 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/cart', [CartController::class, 'getCart']);
     Route::post('/cart/update', [CartController::class, 'updateCart']);
-    Route::post('/cart/checkout', [CartController::class, 'proceedToCheckout']);
+    Route::post('/cart/checkout', [CartController::class, 'checkout']);
+    Route::get('/cart/checkout', [CartController::class, 'getCheckoutItems']);
+    Route::post('/cart/purchase', [CartController::class, 'purchase']);
+    Route::post('/cart/save', [ApiController::class, 'saveCart']);
     Route::delete('/cart', [CartController::class, 'clearCart']);
     Route::delete('/cart/item/{product_id}', [CartController::class, 'removeCartItem']);
     Route::post('/products', [ApiController::class, 'store']);

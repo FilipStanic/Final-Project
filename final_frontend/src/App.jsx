@@ -20,8 +20,8 @@ import EditProduct from './EditProduct';
 const App = () => {
     return (
         <Router>
-            <AuthProvider>
-                <CartProvider>
+            <CartProvider>
+                <AuthProvider>
                     <Layout>
                         <Routes>
                             <Route path="/" element={<MainPage />} />
@@ -38,8 +38,8 @@ const App = () => {
                         </Routes>
                         <ToastContainer />
                     </Layout>
-                </CartProvider>
-            </AuthProvider>
+                </AuthProvider>
+            </CartProvider>
         </Router>
     );
 };

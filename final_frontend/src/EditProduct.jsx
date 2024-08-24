@@ -67,7 +67,7 @@ const EditProduct = () => {
         };
 
         fetchTags();
-    }, [formData.category_id]);
+    }, [formData.category_id]); // Run only when category_id changes
 
     const handleChange = (e) => {
         const { name, value } = e.target;

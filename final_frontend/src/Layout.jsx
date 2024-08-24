@@ -9,6 +9,11 @@ const Layout = ({ children }) => {
     const { cartItems } = useCart();
     const navigate = useNavigate();
 
+    const handleLogout = () => {
+        logout();
+        navigate('/');
+    };
+
     return (
         <div className="min-h-screen flex flex-col">
             <header className="flex-none p-4 flex justify-between items-center border-b-black shadow-lg z-20 relative">
@@ -28,7 +33,7 @@ const Layout = ({ children }) => {
                                     <Link to="/profile" className="block px-4 py-2 text-white hover:bg-[#3166b4] rounded-lg">
                                         My Profile
                                     </Link>
-                                    <button className="block w-full text-left px-4 py-2 text-white bg-[#ff2626] rounded-lg" onClick={logout}>
+                                    <button className="block w-full text-left px-4 py-2 text-white bg-[#ff2626] rounded-lg" onClick={handleLogout}>
                                         Logout
                                     </button>
                                 </div>
@@ -59,7 +64,7 @@ const Layout = ({ children }) => {
                     <div className="relative">
                         <Link to="/cart">
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" viewBox="0 0 24 24" strokeWidth="1.9" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                <path stroke="none" d="M0 0h24H0z" fill="none" />
                                 <path d="M6 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
                                 <path d="M17 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
                                 <path d="M17 17h-11v-14h-2" />
