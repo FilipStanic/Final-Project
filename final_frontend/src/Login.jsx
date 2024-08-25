@@ -15,18 +15,25 @@ const Login = () => {
         setErrors({}); // Clear previous errors
 
         try {
-            const response = await axios.post('http://127.0.0.1:8000/api/login', {
+            const { data } = await axios.post('http://127.0.0.1:8000/api/login', {
                 email,
                 password
             });
 
-            const { token } = response.data;
-            localStorage.setItem('authToken', token);
-            login(token);
-            navigate('/');
+            const { token, user } = data;
+
+            if (!user.email_verified_at) {
+                setErrors({ general: 'Your email is not verified. Please check your inbox.' });
+            } else {
+                localStorage.setItem('authToken', token);
+                login(token);
+                navigate('/');
+            }
         } catch (error) {
             if (error.response && error.response.data.errors) {
                 setErrors(error.response.data.errors);
+            } else if (error.response && error.response.data.message) {
+                setErrors({ general: error.response.data.message });
             } else {
                 setErrors({ general: 'Invalid email or password' });
             }

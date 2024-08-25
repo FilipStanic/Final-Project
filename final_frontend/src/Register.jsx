@@ -14,20 +14,28 @@ const Register = () => {
     const handleRegister = async (e) => {
         e.preventDefault();
         setErrors({});
-        
+    
         try {
+            console.log('Registering user:', { name, email });
+    
             const response = await axios.post('http://127.0.0.1:8000/api/register', {
                 name,
                 email,
                 password,
                 password_confirmation: passwordConfirmation,
             });
+    
+            console.log('Registration successful:', response.data);
+    
 
+            localStorage.setItem('authToken', response.data.token);
+    
             setSuccess('Registration successful! Redirecting to login...');
             setTimeout(() => {
                 navigate('/success');
-            }, 1500);
+            }, 800);
         } catch (error) {
+            console.error('Registration failed:', error);
             if (error.response && error.response.data.errors) {
                 setErrors(error.response.data.errors);
             } else {
@@ -35,6 +43,7 @@ const Register = () => {
             }
         }
     };
+    
 
     return (
         <div className="flex justify-center items-center min-h-screen">

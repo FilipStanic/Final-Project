@@ -107,7 +107,7 @@ const Profile = () => {
                     <h2 className="text-xl font-semibold mb-4 text-[#093a74]">Your Products</h2>
 
                     {products.length === 0 ? (
-                        <p className="text-white">No products yet.</p>
+                        <p className="text-[#093a74]">No products yet.</p>
                     ) : (
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                             {products.map(product => (

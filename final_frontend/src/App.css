@@ -2,7 +2,7 @@
 
 body {
     font-family: 'Oswald', sans-serif;
-    background-color: rgb(204, 226, 250);
+    background: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(158,204,255,1) 50%, rgba(255,255,255,1) 100%);
     color: rgb(9, 58, 116);
     margin: 0;
     padding: 0;
@@ -25,7 +25,6 @@ header img {
 
 button, .btn {
     color: rgb(255, 255, 255);
-    border: none;
     padding: 10px 20px;
     border-radius: 25px;
     font-family: 'Oswald', sans-serif;

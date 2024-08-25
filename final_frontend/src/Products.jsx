@@ -102,7 +102,7 @@ const Products = () => {
 
     return (
         <div className="flex p-4">
-            <div className='w-14 p-4 -ml-4 -mt-4 -mb-4 bg-white bg-opacity-40 flex flex-col items-center'>
+            <div className='w-14 p-4 -ml-4 -mt-4 -mb-4 bg-white bg-opacity-40 border flex flex-col items-center'>
                 <aside className="flex-none h-screen">
                     <nav className="space-y-4">
                         <svg
@@ -156,7 +156,7 @@ const Products = () => {
                     </aside>
                 </div>
             )}
-            <div className="flex-1 p-5 md:p-10">
+            <div className="flex-1 p-5 -mt-4 md:p-10">
                 <div className="flex justify-between mb-4 items-center">
                     <div className="category-buttons">
                         <button
