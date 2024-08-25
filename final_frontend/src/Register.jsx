@@ -14,36 +14,38 @@ const Register = () => {
     const handleRegister = async (e) => {
         e.preventDefault();
         setErrors({});
-    
+
         try {
-            console.log('Registering user:', { name, email });
-    
             const response = await axios.post('http://127.0.0.1:8000/api/register', {
                 name,
                 email,
                 password,
                 password_confirmation: passwordConfirmation,
             });
-    
-            console.log('Registration successful:', response.data);
-    
 
             localStorage.setItem('authToken', response.data.token);
-    
+
             setSuccess('Registration successful! Redirecting to login...');
             setTimeout(() => {
                 navigate('/success');
             }, 800);
         } catch (error) {
             console.error('Registration failed:', error);
+            const errMsg = error.response?.data?.message || 'Something went wrong. Please try again later.';
+
             if (error.response && error.response.data.errors) {
-                setErrors(error.response.data.errors);
+                if (error.response.data.errors.email) {
+                    setErrors({ email: 'The email address is already taken.' });
+                } else if (error.response.data.errors.password) {
+                    setErrors({ password: 'The password is too weak or does not match the confirmation.' });
+                } else {
+                    setErrors(error.response.data.errors);
+                }
             } else {
-                setErrors({ general: 'Something went wrong. Please try again later.' });
+                setErrors({ general: errMsg });
             }
         }
     };
-    
 
     return (
         <div className="flex justify-center items-center min-h-screen">
@@ -74,7 +76,7 @@ const Register = () => {
                             onChange={(e) => setEmail(e.target.value)}
                             required
                         />
-                        {errors.email && <p className="text-red-500 text-sm">{errors.email[0]}</p>}
+                        {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
                     </div>
                     <div>
                         <label htmlFor="password" className="block text-sm font-medium text-white">Password</label>
@@ -86,7 +88,7 @@ const Register = () => {
                             onChange={(e) => setPassword(e.target.value)}
                             required
                         />
-                        {errors.password && <p className="text-red-500 text-sm">{errors.password[0]}</p>}
+                        {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
                     </div>
                     <div>
                         <label htmlFor="passwordConfirmation" className="block text-sm font-medium text-white">Confirm Password</label>

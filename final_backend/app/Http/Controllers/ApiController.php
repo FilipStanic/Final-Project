@@ -121,7 +121,7 @@ class ApiController extends Controller
 
             $user = Auth::user();
 
-            if (!$user->hasVerifiedEmail()) {
+            if ($user->role !== 'admin' && !$user->hasVerifiedEmail()) {
                 Log::warning('Login failed - email not verified', ['user_id' => $user->id]);
                 return response()->json(['message' => 'Your email is not verified. Please check your inbox.'], 403);
             }
@@ -136,6 +136,7 @@ class ApiController extends Controller
                 'user' => [
                     'name' => $user->name,
                     'email' => $user->email,
+                    'role' => $user->role,
                 ],
             ], 200);
         } catch (\Exception $e) {
@@ -143,7 +144,6 @@ class ApiController extends Controller
             return response()->json(['error' => 'Something went wrong', 'details' => $e->getMessage()], 500);
         }
     }
-
 
 
     public function register(Request $request)
@@ -210,6 +210,7 @@ class ApiController extends Controller
             return response()->json(['message' => 'Verification failed. Please try again.'], 500);
         }
     }
+
 
 
     public function resendVerificationEmail(Request $request)

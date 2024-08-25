@@ -12,12 +12,12 @@ const Login = () => {
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        setErrors({}); // Clear previous errors
+        setErrors({});
 
         try {
             const { data } = await axios.post('http://127.0.0.1:8000/api/login', {
                 email,
-                password
+                password,
             });
 
             const { token, user } = data;
@@ -30,13 +30,8 @@ const Login = () => {
                 navigate('/');
             }
         } catch (error) {
-            if (error.response && error.response.data.errors) {
-                setErrors(error.response.data.errors);
-            } else if (error.response && error.response.data.message) {
-                setErrors({ general: error.response.data.message });
-            } else {
-                setErrors({ general: 'Invalid email or password' });
-            }
+            const errMsg = error.response?.data?.message || 'Invalid email or password';
+            setErrors({ general: errMsg });
         }
     };
 

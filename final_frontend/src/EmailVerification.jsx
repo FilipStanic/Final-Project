@@ -9,37 +9,31 @@ const EmailVerification = () => {
     const [message, setMessage] = useState('');
 
     useEffect(() => {
-        const queryParams = new URLSearchParams(location.search);
-        const verifyUrl = queryParams.get('verify_url');
-    
+        // Construct the verification URL
+        const verifyUrl = location.pathname + location.search;
+
         console.log('Verification URL:', verifyUrl);
-    
-        if (verifyUrl) {
-            axios.get(verifyUrl)
-                .then(response => {
-                    console.log('Verification successful:', response);
-                    setStatus('success');
-                    setMessage('Your email has been successfully verified!');
-                    setTimeout(() => {
-                        navigate('/login');
-                    }, 5000);
-                })
-                .catch(error => {
-                    console.error('Verification failed:', error);
-                    setStatus('error');
-                    if (error.response && error.response.data.message) {
-                        setMessage(error.response.data.message);
-                    } else {
-                        setMessage('An error occurred while verifying your email. Please try again.');
-                    }
-                });
-        } else {
-            console.error('Invalid verification link.');
-            setStatus('error');
-            setMessage('Invalid verification link.');
-        }
+
+        // Change axios.post to axios.get to match the backend route method
+        axios.get(verifyUrl)
+            .then(response => {
+                console.log('Verification successful:', response);
+                setStatus('success');
+                setMessage('Your email has been successfully verified!');
+                setTimeout(() => {
+                    navigate('/login');
+                }, 5000);
+            })
+            .catch(error => {
+                console.error('Verification failed:', error);
+                setStatus('error');
+                if (error.response && error.response.data.message) {
+                    setMessage(error.response.data.message);
+                } else {
+                    setMessage('An error occurred while verifying your email. Please try again.');
+                }
+            });
     }, [location, navigate]);
-    
 
     const renderContent = () => {
         switch (status) {

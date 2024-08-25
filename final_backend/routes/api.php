@@ -5,8 +5,6 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\TagController;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/products', [ApiController::class, 'getProducts']);
@@ -25,7 +23,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user/products', [ApiController::class, 'getUserProducts']);
 });
 
-Route::post('/email/verify/{id}/{hash}', [ApiController::class, 'verifyEmail'])
+Route::post('/verify-email/{id}/{hash}', [ApiController::class, 'verifyEmail'])
     ->middleware(['signed'])
     ->name('verification.verify');
 

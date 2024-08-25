@@ -20,10 +20,10 @@ class CustomVerifyEmail extends VerifyEmail
             ]
         );
 
-        $frontendUrl = 'http://localhost:5173/email-verification';
-
-        return $frontendUrl . '?verify_url=' . urlencode($signedUrl);
+        return 'http://localhost:5173/email-verification?verify_url=' . urlencode($signedUrl);
     }
+
+
 
     public function toMail($notifiable)
     {
