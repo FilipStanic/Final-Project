@@ -20,11 +20,10 @@ const Login = () => {
                 password,
             });
 
-            const { token, user } = data;
-
-            if (!user.email_verified_at) {
-                setErrors({ general: 'Your email is not verified. Please check your inbox.' });
+            if (data.message === 'Your email address is not verified. Please check your email to verify your account.') {
+                setErrors({ general: data.message });
             } else {
+                const { token, user } = data;
                 localStorage.setItem('authToken', token);
                 login(token);
                 navigate('/');
@@ -56,7 +55,6 @@ const Login = () => {
                         className="w-full p-2 border rounded text-black text-md"
                         required
                     />
-                    {errors.email && <p className="text-red-500 text-sm">{errors.email[0]}</p>}
                 </div>
                 <div className="mb-4">
                     <label htmlFor="password" className="block text-white mb-2 text-md">Password</label>
@@ -68,7 +66,6 @@ const Login = () => {
                         className="w-full p-2 border rounded text-black text-md"
                         required
                     />
-                    {errors.password && <p className="text-red-500 text-sm">{errors.password[0]}</p>}
                 </div>
                 <button
                     type="submit"

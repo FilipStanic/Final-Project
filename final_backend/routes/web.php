@@ -13,25 +13,15 @@ Route::middleware(['web'])->group(function () {
         return view('welcome');
     });
 
+    Route::get('/register/success', function () {
+        return view('auth.register-success');
+    })->name('register.success');
+
+
     Route::get('/dashboard', function () {
         $products = Product::with('category')->get();
         return view('dashboard', compact('products'));
     })->name('dashboard');
-
-    Route::get('/email/verify', function () {
-        return view('auth.verify-email');
-    })->name('verification.notice');
-
-
-    Route::get('/verify-email/{id}/{hash}', function (EmailVerificationRequest $request) {
-        $request->fulfill();
-        return redirect('http://localhost:5173/verification-success');
-    })->middleware(['signed'])->name('verification.verify');
-
-    Route::post('/email/resend', function (Request $request) {
-        $request->user()->sendEmailVerificationNotification();
-        return back()->with('message', 'Verification link sent!');
-    })->name('verification.resend');
 
     Route::middleware('auth')->group(function () {
         Route::get('/products', [ProductController::class, 'index'])->name('products.index');

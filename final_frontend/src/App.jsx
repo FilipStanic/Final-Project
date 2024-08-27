@@ -18,8 +18,6 @@ import MainPage from './MainPage';
 import EditProduct from './EditProduct';
 import About from './About'
 import ContactUs from './ContactUs'
-import VerificationSuccess from './VerificationSuccess';
-import EmailVerification from './EmailVerification';
 
 
 const App = () => {
@@ -42,8 +40,6 @@ const App = () => {
                             <Route path="/checkout" element={<Checkout />} />
                             <Route path="/upload" element={<UploadImg />} />
                             <Route path="/edit-product/:id" element={<EditProduct />} />
-                            <Route path="/email-verification" element={<EmailVerification />} />
-                            <Route path="/verification-success" element={<VerificationSuccess />} />
                         </Routes>
                         <ToastContainer />
                     </Layout>

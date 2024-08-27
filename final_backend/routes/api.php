@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ApiController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
@@ -23,14 +24,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user/products', [ApiController::class, 'getUserProducts']);
 });
 
-Route::post('/verify-email/{id}/{hash}', [ApiController::class, 'verifyEmail'])
-    ->middleware(['signed'])
-    ->name('verification.verify');
-
-Route::post('/email/resend', [ApiController::class, 'resendVerificationEmail'])
-    ->name('verification.resend');
-
-Route::middleware(['auth:sanctum', 'verified'])->group(function () {
+Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/cart', [CartController::class, 'getCart']);
     Route::post('/cart/update', [CartController::class, 'updateCart']);
     Route::post('/cart/checkout', [CartController::class, 'checkout']);
