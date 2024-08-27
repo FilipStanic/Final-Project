@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const UploadImg = () => {
     const [categories, setCategories] = useState([]);
+    const [tags, setTags] = useState([]);
+    const [selectedTags, setSelectedTags] = useState([]);
     const [formData, setFormData] = useState({
         title: '',
         description: '',
@@ -10,19 +13,27 @@ const UploadImg = () => {
         image: null,
         category_id: ''
     });
+    const [errors, setErrors] = useState({});
+
+    const navigate = useNavigate();
 
     useEffect(() => {
-        const fetchCategories = async () => {
+        const fetchCategoriesAndTags = async () => {
             try {
-                const response = await axios.get('http://127.0.0.1:8000/api/categories');
-                setCategories(response.data);
+                const categoryResponse = await axios.get('http://127.0.0.1:8000/api/categories');
+                setCategories(categoryResponse.data);
+
+                if (formData.category_id) {
+                    const tagResponse = await axios.get(`http://127.0.0.1:8000/api/categories/${formData.category_id}/tags`);
+                    setTags(tagResponse.data);
+                }
             } catch (error) {
-                console.error('Error fetching categories:', error);
+                console.error('Error fetching categories or tags:', error);
             }
         };
 
-        fetchCategories();
-    }, []);
+        fetchCategoriesAndTags();
+    }, [formData.category_id]);
 
     const handleChange = (e) => {
         const { name, value, type, files } = e.target;
@@ -30,6 +41,14 @@ const UploadImg = () => {
             ...prevData,
             [name]: type === 'file' ? files[0] : value
         }));
+    };
+
+    const handleTagSelection = (tagId) => {
+        setSelectedTags(prevTags =>
+            prevTags.includes(tagId)
+                ? prevTags.filter(tag => tag !== tagId)
+                : [...prevTags, tagId]
+        );
     };
 
     const handleSubmit = async (e) => {
@@ -42,15 +61,27 @@ const UploadImg = () => {
         data.append('image', formData.image);
         data.append('category_id', formData.category_id);
 
+        selectedTags.forEach(tag => {
+            data.append('tags[]', tag);
+        });
+
         try {
             await axios.post('http://127.0.0.1:8000/api/products', data, {
                 headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
+                    'Content-Type': 'multipart/form-data',
+                    Authorization: `Bearer ${localStorage.getItem('authToken')}`,
+                },
             });
-            alert('Product uploaded successfully!');
+
+            navigate('/products');
         } catch (error) {
             console.error('Error uploading product:', error);
+
+            if (error.response && error.response.data && error.response.data.errors) {
+                setErrors(error.response.data.errors);
+            } else {
+                setErrors({ general: 'An unknown error occurred while creating the product.' });
+            }
         }
     };
 
@@ -67,9 +98,9 @@ const UploadImg = () => {
                         value={formData.title}
                         onChange={handleChange}
                         required
-                        className="border text-black border-gray-300 rounded-md p-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className={`border text-black border-gray-300 rounded-md p-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.title ? 'border-red-500' : ''}`}
                     />
-                    <small className="">Maximum 3 words, 100 characters</small>
+                    {errors.title && <p className="text-red-500 text-sm">{errors.title[0]}</p>}
                 </div>
 
                 <div className="mb-4">
@@ -78,23 +109,22 @@ const UploadImg = () => {
                         name="description"
                         value={formData.description}
                         onChange={handleChange}
-                        className="border border-gray-300 rounded-md p-2 w-full text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className={`border border-gray-300 rounded-md p-2 w-full text-black focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.description ? 'border-red-500' : ''}`}
                     />
-                    <small className="">Maximum 100 characters</small>
+                    {errors.description && <p className="text-red-500 text-sm">{errors.description[0]}</p>}
                 </div>
 
                 <div className="mb-4">
-                    <label className="block  font-bold mb-2">Price:</label>
+                    <label className="block  font-bold mb-2">Price (USD):</label>
                     <input
                         type="number"
                         name="price"
                         value={formData.price}
                         onChange={handleChange}
                         required
-                        className="border text-black border-gray-300 rounded-md p-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        placeholder="Enter price"
-                        step="0.01"
+                        className={`border text-black border-gray-300 rounded-md p-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.price ? 'border-red-500' : ''}`}
                     />
+                    {errors.price && <p className="text-red-500 text-sm">{errors.price[0]}</p>}
                 </div>
 
                 <div className="mb-4">
@@ -104,8 +134,9 @@ const UploadImg = () => {
                         name="image"
                         onChange={handleChange}
                         required
-                        className="border border-gray-300 rounded-md p-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className={`border border-gray-300 rounded-md p-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.image ? 'border-red-500' : ''}`}
                     />
+                    {errors.image && <p className="text-red-500 text-sm">{errors.image[0]}</p>}
                 </div>
 
                 <div className="mb-4">
@@ -115,7 +146,7 @@ const UploadImg = () => {
                         value={formData.category_id}
                         onChange={handleChange}
                         required
-                        className="border border-gray-300 rounded-md text-black p-2 w-full bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className={`border border-gray-300 rounded-md text-black p-2 w-full bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.category_id ? 'border-red-500' : ''}`}
                     >
                         <option value="">Select a Category</option>
                         {categories.map((category) => (
@@ -124,7 +155,32 @@ const UploadImg = () => {
                             </option>
                         ))}
                     </select>
+                    {errors.category_id && <p className="text-red-500 text-sm">{errors.category_id[0]}</p>}
                 </div>
+
+                <div className="mb-4">
+                    <label className="block font-bold mb-2">Tags:</label>
+                    <div className="flex flex-wrap gap-2">
+                        {tags.map((tag) => (
+                            <button
+                                key={tag.id}
+                                type="button"
+                                onClick={() => handleTagSelection(tag.id)}
+                                className={`px-3 py-1 rounded-full border ${selectedTags.includes(tag.id) ? 'bg-gray-200 text-gray-900 border-gray-400' : 'bg-gray-100 text-gray-700 border-gray-300'
+                                    } transition-all duration-200 ease-in-out transform ${selectedTags.includes(tag.id) ? 'scale-105' : 'scale-100'
+                                    }`}
+                            >
+                                {tag.name}
+                                {selectedTags.includes(tag.id) && (
+                                    <span className="ml-2 text-gray-500">✕</span>
+                                )}
+                            </button>
+                        ))}
+                    </div>
+                    {errors.tags && <p className="text-red-500 text-sm">{errors.tags[0]}</p>}
+                </div>
+
+                {errors.general && <p className="text-red-500 text-sm text-center mb-4">{errors.general}</p>}
 
                 <button
                     type="submit"

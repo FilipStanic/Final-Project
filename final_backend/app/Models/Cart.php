@@ -13,6 +13,7 @@ class Cart extends Model
         'user_id',
         'product_id',
         'quantity',
+        'status',
     ];
 
 
@@ -20,4 +21,5 @@ class Cart extends Model
     {
         return $this->belongsTo(Product::class);
     }
+
 }
