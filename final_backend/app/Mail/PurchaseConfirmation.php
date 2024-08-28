@@ -22,7 +22,7 @@ class PurchaseConfirmation extends Mailable
     public function build()
     {
         return $this->view('emails.purchase_confirmation')
-            ->subject('Your Purchase Confirmation')
+            ->subject('Purchase Confirmation')
             ->with([
                 'user' => $this->user,
                 'cartItems' => $this->cartItems,

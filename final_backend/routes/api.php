@@ -4,7 +4,6 @@ use App\Http\Controllers\ApiController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\TagController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
@@ -12,7 +11,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/products', [ApiController::class, 'getProducts']);
 Route::get('/products/image/{imagePath}', [ApiController::class, 'getProductByImagePath']);
-Route::post('/orders', [OrderController::class, 'createOrder']);
 
 
 Route::get('/categories', [CategoryController::class, 'index']);

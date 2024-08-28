@@ -43,7 +43,7 @@ const App = () => {
                             <Route path="/upload" element={<UploadImg />} />
                             <Route path="/edit-product/:id" element={<EditProduct />} />
                             <Route path="/verify-email/:id/:hash" element={<VerifyEmail />} />
-                            <Route path="/thank-you" element={<ThankYou />} />
+                            <Route path="/thank-you/:orderId" element={<ThankYou />} />
                         </Routes>
                         <ToastContainer />
                     </Layout>

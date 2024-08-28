@@ -169,67 +169,48 @@ class CartController extends Controller
         }
     }
 
-    public function purchase(Request $request)
-    {
+    public function purchase(Request $request) {
         $user = $request->user();
+        $cartItems = Cart::where('user_id', $user->id)->where('status', 'checkout')->get();
 
-        try {
-            $cartItems = Cart::where('user_id', $user->id)->where('status', 'checkout')->get();
-
-            if ($cartItems->isEmpty()) {
-                return response()->json(['message' => 'No items to purchase'], 404);
-            }
-
-            foreach ($cartItems as $cartItem) {
-                $cartItem->status = 'purchased';
-                $cartItem->save();
-            }
-
-
-            Mail::to($user->email)->send(new PurchaseConfirmation($user, $cartItems));
-
-            return response()->json(['message' => 'Purchase successful, confirmation email sent.'], 200);
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'Internal Server Error', 'details' => $e->getMessage()], 500);
+        if ($cartItems->isEmpty()) {
+            return response()->json(['message' => 'No items to purchase'], 404);
         }
-    }
 
-    public function getPurchasedItems($orderId, Request $request)
-    {
-        $user = $request->user();
+        $orderId = Cart::max('order_id') + 1;
 
-        try {
-            $purchasedItems = Cart::where('user_id', $user->id)
-                ->where('order_id', $orderId)
-                ->where('status', 'purchased')
-                ->with('product:id,title,price,image_path')
-                ->get();
-
-            if ($purchasedItems->isEmpty()) {
-                return response()->json(['message' => 'No purchased items found'], 404);
-            }
-
-            $purchasedItems = $purchasedItems->map(function($item) {
-                return [
-                    'id' => $item->product_id,
-                    'title' => $item->product->title,
-                    'price' => $item->product->price,
-                    'image_path' => $item->product->image_path,
-                    'quantity' => $item->quantity
-                ];
-            });
-
-            return response()->json($purchasedItems);
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'Internal Server Error', 'details' => $e->getMessage()], 500);
+        foreach ($cartItems as $cartItem) {
+            $cartItem->status = 'purchased';
+            $cartItem->order_id = $orderId;
+            $cartItem->save();
         }
+
+        Mail::to($user->email)->send(new PurchaseConfirmation($user, $cartItems));
+
+        return response()->json(['message' => 'Purchase successful, confirmation email sent.', 'order_id' => $orderId], 200);
     }
 
 
+    public function getPurchasedItems($orderId) {
+        $purchasedItems = Cart::where('order_id', $orderId)
+            ->where('status', 'purchased')
+            ->with('product:id,title,price,image_path')
+            ->get();
 
+        if ($purchasedItems->isEmpty()) {
+            return response()->json(['message' => 'No purchased items found'], 404);
+        }
 
+        $purchasedItems = $purchasedItems->map(function($item) {
+            return [
+                'id' => $item->product_id,
+                'title' => $item->product->title,
+                'price' => $item->product->price,
+                'image_path' => $item->product->image_path,
+                'quantity' => $item->quantity
+            ];
+        });
 
-
-
-
+        return response()->json($purchasedItems);
+    }
 }

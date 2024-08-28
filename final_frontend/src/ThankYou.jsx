@@ -1,98 +1,103 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useAuth } from './AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { saveAs } from 'file-saver';
+import { useAuth } from './AuthContext';
 
-const ThankYou = ({ orderId }) => {
-    const [purchasedItems, setPurchasedItems] = useState([]);
+const ThankYou = () => {
+    const [items, setItems] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const { authToken } = useAuth();
+    const { orderId } = useParams();
     const navigate = useNavigate();
+    const { authToken } = useAuth();
 
     useEffect(() => {
         const fetchPurchasedItems = async () => {
             try {
                 const response = await axios.get(`http://127.0.0.1:8000/api/cart/purchased-items/${orderId}`, {
                     headers: {
-                        Authorization: `Bearer ${authToken}`,
-                    },
+                        Authorization: `Bearer ${authToken}`
+                    }
                 });
-                setPurchasedItems(response.data);
-            } catch (err) {
-                console.error('Error fetching purchased items:', err);
-                setError(err.response ? err.response.data.message : 'Unknown error occurred');
+    
+                if (Array.isArray(response.data)) {
+                    setItems(response.data);
+                } else {
+                    setError('Unexpected response format');
+                }
+            } catch (error) {
+                setError('Error fetching purchased items.');
+                console.error('Error:', error);
             } finally {
                 setLoading(false);
             }
         };
-
+    
         fetchPurchasedItems();
-    }, [authToken, orderId]);
+    }, [orderId, authToken]); 
+    
 
-    const handleDownloadImage = (imagePath, title) => {
+    const downloadImage = (imagePath, title) => {
         axios({
             url: `http://127.0.0.1:8000/storage/${imagePath}`,
             method: 'GET',
-            responseType: 'blob', // Important
+            responseType: 'blob',
         }).then((response) => {
-            const file = new Blob([response.data], { type: 'image/jpeg' }); // Adjust MIME type if needed
-            saveAs(file, `${title}.jpg`);
+            saveAs(new Blob([response.data]), `${title}.jpg`);
+        }).catch((error) => {
+            console.error('Error downloading image:', error);
         });
     };
 
-    const handleContinueBrowsing = () => {
-        navigate('/products');
-    };
-
-    if (loading) return <p>Loading...</p>;
-    if (error) return <p>Error: {error}</p>;
+    if (loading) return <p className="text-gray-500">Loading...</p>;
+    if (error) return <p className="text-red-500">{error}</p>;
 
     return (
-        <div className="p-4">
-            <h1 className="text-3xl font-bold mb-6">Thank You for Your Purchase!</h1>
-            <p>Your products have been sent to your email.</p>
-            {purchasedItems.length > 0 && (
-                <>
-                    <h2 className="text-2xl font-bold mt-4">Your Purchased Items:</h2>
-                    <ul>
-                        {purchasedItems.map((item) => (
-                            <li key={item.id} className="flex items-center border-b border-gray-200 py-2">
-                                {item.image_path && (
-                                    <img
-                                        src={`http://127.0.0.1:8000/storage/${item.image_path}`}
-                                        alt={item.title}
-                                        className="w-16 h-16 object-cover mr-4 rounded"
-                                    />
-                                )}
-                                <div className="flex-grow">
-                                    <h2 className="text-xl font-bold">{item.title}</h2>
-                                    <p className="text-lg">Price: ${item.price}</p>
-                                    <p className="text-lg">Quantity: {item.quantity}</p>
-                                    <p className="text-lg font-semibold">
-                                        Total: ${(item.price * item.quantity).toFixed(2)}
-                                    </p>
-                                    <button
-                                        onClick={() => handleDownloadImage(item.image_path, item.title)}
-                                        className="text-blue-500 hover:underline mt-2"
-                                    >
-                                        Download Image
-                                    </button>
-                                </div>
-                            </li>
-                        ))}
-                    </ul>
-                    <div className="mt-8">
-                        <button
-                            onClick={handleContinueBrowsing}
-                            className="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded font-semibold"
-                        >
-                            Continue Browsing
-                        </button>
-                    </div>
-                </>
+        <div className="p-6 max-w-2xl mx-auto">
+            <h1 className="text-2xl font-bold mb-6 text-center text-green-600">Thank You for Your Purchase!</h1>
+
+            {items.length > 0 ? (
+                <ul className="space-y-4">
+                    {items.map((item) => (
+                        <li key={item.id} className="flex items-center border-b border-gray-200 pb-4">
+                            <img
+                                src={`http://127.0.0.1:8000/storage/${item.image_path}`}
+                                alt={item.title}
+                                className="w-20 h-20 object-cover mr-4 rounded-lg shadow-sm"
+                            />
+                            <div className="flex-1">
+                                <h2 className="text-lg font-semibold text-gray-800">{item.title}</h2>
+                                <p className="text-md text-gray-600 mt-1">Price: <span className="font-medium">${item.price}</span></p>
+                                <p className="text-md text-gray-600 mt-1">Quantity: <span className="font-medium">{item.quantity}</span></p>
+                                <button
+                                    onClick={() => downloadImage(item.image_path, item.title)}
+                                    className="mt-2 inline-block text-blue-600 hover:text-blue-800 font-medium"
+                                >
+                                    Download Image
+                                </button>
+                            </div>
+                        </li>
+                    ))}
+                </ul>
+            ) : (
+                <p className="text-gray-600 text-md text-center">No items found for this order.</p>
             )}
+
+            <div className="mt-8 flex justify-center">
+                <button
+                    onClick={() => navigate('/')}
+                    className="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium mr-4"
+                >
+                    Home
+                </button>
+                <button
+                    onClick={() => navigate('/products')}
+                    className="bg-green-500 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium"
+                >
+                    Products
+                </button>
+            </div>
         </div>
     );
 };

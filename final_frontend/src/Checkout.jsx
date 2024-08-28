@@ -23,7 +23,6 @@ const Checkout = () => {
                 });
                 setCheckoutItems(response.data);
             } catch (err) {
-                console.error('Error fetching checkout items:', err);
                 setError(err.response ? err.response.data.message : 'Unknown error occurred');
             } finally {
                 setLoading(false);
@@ -50,28 +49,28 @@ const Checkout = () => {
                 Swal.fire('Error', 'There was an error clearing your cart.', 'error');
             }
         } catch (error) {
-            console.error('Error clearing cart:', error);
             Swal.fire('Error', 'There was an error clearing your cart.', 'error');
         }
     };
 
     const handleBuyNow = async () => {
         try {
-            await axios.post('http://127.0.0.1:8000/api/cart/purchase', {}, {
+            const response = await axios.post('http://127.0.0.1:8000/api/cart/purchase', {}, {
                 headers: {
                     Authorization: `Bearer ${authToken}`
                 }
             });
-    
+
+            const orderId = response.data.order_id;
+
+            Swal.fire('Success', 'Purchase completed successfully!', 'success');
             setCartItems([]);
             localStorage.removeItem('cartItems');
-            navigate('/thank-you');
+            navigate(`/thank-you/${orderId}`);
         } catch (error) {
-            console.error('Error processing purchase:', error);
             Swal.fire('Error', 'There was an error processing your purchase.', 'error');
         }
     };
-    
 
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error: {error}</p>;
