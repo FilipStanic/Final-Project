@@ -18,6 +18,8 @@ import MainPage from './MainPage';
 import EditProduct from './EditProduct';
 import About from './About'
 import ContactUs from './ContactUs'
+import VerifyEmail from './VerifyEmail';
+import ThankYou from './ThankYou';
 
 
 const App = () => {
@@ -40,6 +42,8 @@ const App = () => {
                             <Route path="/checkout" element={<Checkout />} />
                             <Route path="/upload" element={<UploadImg />} />
                             <Route path="/edit-product/:id" element={<EditProduct />} />
+                            <Route path="/verify-email/:id/:hash" element={<VerifyEmail />} />
+                            <Route path="/thank-you" element={<ThankYou />} />
                         </Routes>
                         <ToastContainer />
                     </Layout>

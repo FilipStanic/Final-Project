@@ -45,10 +45,16 @@ class CustomVerifyEmail extends Notification
      */
     protected function verificationUrl($notifiable)
     {
-        return URL::temporarySignedRoute(
-            'verification.verify',
+        $frontendUrl = config('app.frontend_url');
+
+        $temporarySignedUrl = URL::temporarySignedRoute(
+            'api.verification.verify',
             Carbon::now()->addMinutes(60),
             ['id' => $notifiable->getKey(), 'hash' => sha1($notifiable->getEmailForVerification())]
         );
+
+        return str_replace(url('/api/email/verify'), $frontendUrl . '/verify-email', $temporarySignedUrl);
     }
+
+
 }

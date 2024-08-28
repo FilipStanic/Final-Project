@@ -7,6 +7,7 @@ use App\Models\Cart;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Auth\Events\Verified;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -160,12 +161,10 @@ class ApiController extends Controller
 
             event(new Registered($user));
 
-            $token = $user->createToken('Personal Access Token')->plainTextToken;
 
 
             return response()->json([
                 'message' => 'Registration successful. A verification email has been sent to your email address.',
-                'token' => $token,
                 'user' => [
                     'name' => $user->name,
                     'email' => $user->email,
@@ -175,6 +174,25 @@ class ApiController extends Controller
             return response()->json(['error' => 'Something went wrong', 'details' => $e->getMessage()], 500);
         }
     }
+
+    public function verifyEmail(Request $request, $id, $hash)
+    {
+        $user = User::findOrFail($id);
+
+        if (!hash_equals((string) $hash, sha1($user->getEmailForVerification()))) {
+            return response()->json(['message' => 'The verification link is invalid or has expired. Please request a new link.'], 403);
+        }
+
+        if ($user->hasVerifiedEmail()) {
+            return response()->json(['message' => 'Your email has been verified! Redirecting to login...'], 200);
+        }
+
+        if ($user->markEmailAsVerified()) {
+            event(new Verified($user));
+        }
+    }
+
+
 
 
     public function getUser(Request $request)

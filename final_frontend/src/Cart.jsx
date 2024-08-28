@@ -115,8 +115,6 @@ const Cart = () => {
 
             setCartItems([]);
             localStorage.removeItem('cartItems');
-    
-            Swal.fire('Success', 'Checkout completed and cart cleared.', 'success');
             navigate('/checkout');
         } catch (error) {
             console.error('Error during checkout:', error);

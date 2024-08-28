@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\PurchaseConfirmation;
 use App\Models\Cart;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class CartController extends Controller
 {
@@ -183,11 +185,46 @@ class CartController extends Controller
                 $cartItem->save();
             }
 
-            return response()->json(['message' => 'Purchase successful']);
+
+            Mail::to($user->email)->send(new PurchaseConfirmation($user, $cartItems));
+
+            return response()->json(['message' => 'Purchase successful, confirmation email sent.'], 200);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Internal Server Error', 'details' => $e->getMessage()], 500);
         }
     }
+
+    public function getPurchasedItems($orderId, Request $request)
+    {
+        $user = $request->user();
+
+        try {
+            $purchasedItems = Cart::where('user_id', $user->id)
+                ->where('order_id', $orderId)
+                ->where('status', 'purchased')
+                ->with('product:id,title,price,image_path')
+                ->get();
+
+            if ($purchasedItems->isEmpty()) {
+                return response()->json(['message' => 'No purchased items found'], 404);
+            }
+
+            $purchasedItems = $purchasedItems->map(function($item) {
+                return [
+                    'id' => $item->product_id,
+                    'title' => $item->product->title,
+                    'price' => $item->product->price,
+                    'image_path' => $item->product->image_path,
+                    'quantity' => $item->quantity
+                ];
+            });
+
+            return response()->json($purchasedItems);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Internal Server Error', 'details' => $e->getMessage()], 500);
+        }
+    }
+
 
 
 

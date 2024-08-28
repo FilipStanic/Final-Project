@@ -21,7 +21,6 @@ const Checkout = () => {
                         Authorization: `Bearer ${authToken}`
                     }
                 });
-                console.log('Checkout items response:', response.data);
                 setCheckoutItems(response.data);
             } catch (err) {
                 console.error('Error fetching checkout items:', err);
@@ -63,16 +62,16 @@ const Checkout = () => {
                     Authorization: `Bearer ${authToken}`
                 }
             });
-
-            Swal.fire('Success', 'Purchase completed successfully!', 'success');
+    
             setCartItems([]);
             localStorage.removeItem('cartItems');
-            navigate('/products');
+            navigate('/thank-you');
         } catch (error) {
             console.error('Error processing purchase:', error);
             Swal.fire('Error', 'There was an error processing your purchase.', 'error');
         }
     };
+    
 
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error: {error}</p>;
@@ -112,7 +111,7 @@ const Checkout = () => {
                         </button>
                         <button
                             onClick={handleBuyNow}
-                            className="bg-green-500 hover:bg-green-700 text-white px-4 py-2 rounded font-semibold"
+                            className="bg-[#6dad63] hover:bg-[#70bb64] text-white px-4 py-2 rounded font-semibold"
                         >
                             Buy Now
                         </button>
