@@ -98,7 +98,7 @@ The project includes email functionalities (e.g., for purchase confirmations). Y
 
 ```
 MAIL_MAILER=smtp
-MAIL_HOST=smtp.mailtrap.io
+MAIL_HOST=sandbox.smtp.mailtrap.io
 MAIL_PORT=2525
 MAIL_USERNAME=your_username
 MAIL_PASSWORD=your_password
@@ -119,3 +119,11 @@ Product Browsing: Users can browse through a variety of products.
 Cart Management: Add, update, or remove products from the cart.
 Secure Checkout: Complete the purchase with a confirmation email.
 Responsive Design: Optimized for both desktop and mobile devices.
+
+# Additional Information
+To access the admin panel and explore the management features of this e-commerce platform, you can log in with the following credentials:
+
+```
+admin@admin.com
+admin
+```
