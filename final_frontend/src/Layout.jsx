@@ -30,7 +30,7 @@ const Layout = ({ children }) => {
                         </svg>
                     </Link>
                     <Link to="/products">
-                        <button className='bg-white text-black'>Products</button>
+                        <button className='bg-[#327d92] text-white'>Products</button>
                     </Link>
                     <Link to="/about">
                         <button className='bg-white text-black'>About Us</button>

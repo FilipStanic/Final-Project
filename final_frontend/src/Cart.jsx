@@ -129,8 +129,8 @@ const Cart = () => {
     }, 0);
 
     return (
-        <div className='p-4'>
-            <div className="p-4 text-[#093a74] rounded-lg border-2 border-[#093a74]">
+        <div className="flex justify-center items-center min-h-screen">
+            <div className="p-4 text-[#093a74] rounded-lg border-2 border-[#093a74] max-w-4xl w-full">
                 <h1 className="text-2xl font-bold mb-4">Your Cart</h1>
                 {cartItems.length === 0 ? (
                     <p>Your cart is empty.</p>
@@ -148,8 +148,8 @@ const Cart = () => {
                                     )}
                                     <div className="flex-grow flex justify-between items-center">
                                         <div className="flex flex-col">
-                                            <h2 className="text-xl font-bold">{item.title}</h2>
-                                            <p className="text-lg">Price: ${item.price}</p>
+                                            <h2 className="text-2xl font-bold">{item.title}</h2>
+                                            <p className="text-lg">Price: <span className='font-bold'>${item.price}</span></p>
                                             <div className="flex items-center mt-1">
                                                 <button
                                                     onClick={() => updateQuantity(item, -1)}
@@ -200,11 +200,11 @@ const Cart = () => {
                                     Clear Cart
                                 </span>
                             </button>
-                            <p className="text-xl font-semibold">Total: ${totalPrice.toFixed(2)}</p>
+                            <p className="text-xl font-semibold">Total: <span className='text-3xl'>${totalPrice.toFixed(2)}</span></p>
                         </div>
-                        <div className="mt-6">
+                        <div className="mt-6 flex justify-center items-center">
                             <button
-                                className="w-full bg-[#6dad63] hover:bg-[#539748] text-white px-4 py-2 rounded font-semibold text-lg"
+                                className="w-fit bg-[#6dad63] hover:bg-[#539748] text-white px-4 py-2 rounded font-semibold text-lg"
                                 onClick={handleProceedToCheckout}
                             >
                                 Proceed to Checkout
@@ -215,6 +215,7 @@ const Cart = () => {
             </div>
         </div>
     );
+    
 };
 
 export default Cart;

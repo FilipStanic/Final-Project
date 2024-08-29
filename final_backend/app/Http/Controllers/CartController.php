@@ -185,7 +185,7 @@ class CartController extends Controller
             $cartItem->save();
         }
 
-        Mail::to($user->email)->send(new PurchaseConfirmation($user, $cartItems));
+        Mail::to($user->email)->send(new PurchaseConfirmation($user, $cartItems, $orderId));
 
         return response()->json(['message' => 'Purchase successful, confirmation email sent.', 'order_id' => $orderId], 200);
     }

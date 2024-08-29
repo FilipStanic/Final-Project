@@ -12,11 +12,14 @@ class PurchaseConfirmation extends Mailable
 
     public $user;
     public $cartItems;
+    public $orderId;
 
-    public function __construct($user, $cartItems)
+
+    public function __construct($user, $cartItems, $orderId)
     {
         $this->user = $user;
         $this->cartItems = $cartItems;
+        $this->orderId = $orderId;
     }
 
     public function build()
@@ -26,6 +29,7 @@ class PurchaseConfirmation extends Mailable
             ->with([
                 'user' => $this->user,
                 'cartItems' => $this->cartItems,
+                'orderId' => $this->orderId,
             ]);
     }
 }

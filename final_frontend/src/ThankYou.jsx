@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
-import { saveAs } from 'file-saver';
 import { useAuth } from './AuthContext';
 
 const ThankYou = () => {
@@ -37,19 +36,6 @@ const ThankYou = () => {
         fetchPurchasedItems();
     }, [orderId, authToken]); 
     
-
-    const downloadImage = (imagePath, title) => {
-        axios({
-            url: `http://127.0.0.1:8000/storage/${imagePath}`,
-            method: 'GET',
-            responseType: 'blob',
-        }).then((response) => {
-            saveAs(new Blob([response.data]), `${title}.jpg`);
-        }).catch((error) => {
-            console.error('Error downloading image:', error);
-        });
-    };
-
     if (loading) return <p className="text-gray-500">Loading...</p>;
     if (error) return <p className="text-red-500">{error}</p>;
 
@@ -70,12 +56,6 @@ const ThankYou = () => {
                                 <h2 className="text-lg font-semibold text-gray-800">{item.title}</h2>
                                 <p className="text-md text-gray-600 mt-1">Price: <span className="font-medium">${item.price}</span></p>
                                 <p className="text-md text-gray-600 mt-1">Quantity: <span className="font-medium">{item.quantity}</span></p>
-                                <button
-                                    onClick={() => downloadImage(item.image_path, item.title)}
-                                    className="mt-2 inline-block text-blue-600 hover:text-blue-800 font-medium"
-                                >
-                                    Download Image
-                                </button>
                             </div>
                         </li>
                     ))}
