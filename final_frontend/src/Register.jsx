@@ -23,12 +23,11 @@ const Register = () => {
                 password_confirmation: passwordConfirmation,
             });
 
-            localStorage.setItem('authToken', response.data.token);
-
-            setSuccess('Registration successful! Redirecting to login...');
+            // Do not log the user in automatically, just show the success message
+            setSuccess('Registration successful! A verification email has been sent to your email address.');
             setTimeout(() => {
-                navigate('/success');
-            }, 800);
+                navigate('/login'); // Redirect to login page
+            }, 3000);
         } catch (error) {
             console.error('Registration failed:', error);
             const errMsg = error.response?.data?.message || 'Something went wrong. Please try again later.';

@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'paths' => ['api/*', 'sanctum/csrf-cookie', 'storage/images/*', 'verify-email/*'],
+    'paths' => ['api/*', 'sanctum/csrf-cookie', 'storage/*', 'storage/images/*', 'verify-email/*'],
 
     'allowed_methods' => ['*'],
 

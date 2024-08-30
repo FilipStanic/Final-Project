@@ -21,10 +21,8 @@ const Checkout = () => {
                         Authorization: `Bearer ${authToken}`
                     }
                 });
-                console.log('Checkout items response:', response.data);
                 setCheckoutItems(response.data);
             } catch (err) {
-                console.error('Error fetching checkout items:', err);
                 setError(err.response ? err.response.data.message : 'Unknown error occurred');
             } finally {
                 setLoading(false);
@@ -51,25 +49,25 @@ const Checkout = () => {
                 Swal.fire('Error', 'There was an error clearing your cart.', 'error');
             }
         } catch (error) {
-            console.error('Error clearing cart:', error);
             Swal.fire('Error', 'There was an error clearing your cart.', 'error');
         }
     };
 
     const handleBuyNow = async () => {
         try {
-            await axios.post('http://127.0.0.1:8000/api/cart/purchase', {}, {
+            const response = await axios.post('http://127.0.0.1:8000/api/cart/purchase', {}, {
                 headers: {
                     Authorization: `Bearer ${authToken}`
                 }
             });
 
+            const orderId = response.data.order_id;
+
             Swal.fire('Success', 'Purchase completed successfully!', 'success');
             setCartItems([]);
             localStorage.removeItem('cartItems');
-            navigate('/products');
+            navigate(`/thank-you/${orderId}`);
         } catch (error) {
-            console.error('Error processing purchase:', error);
             Swal.fire('Error', 'There was an error processing your purchase.', 'error');
         }
     };
@@ -78,47 +76,49 @@ const Checkout = () => {
     if (error) return <p>Error: {error}</p>;
 
     return (
-        <div className="p-4">
-            <h1 className="text-2xl font-bold mb-4">Checkout Items</h1>
-            {checkoutItems.length === 0 ? (
-                <p>No items in checkout.</p>
-            ) : (
-                <>
-                    <ul>
-                        {checkoutItems.map((item, index) => (
-                            <li key={index} className="flex items-center border-b border-gray-200 py-2">
-                                {item.image_path && (
-                                    <img
-                                        src={`http://127.0.0.1:8000/storage/${item.image_path}`}
-                                        alt={item.title}
-                                        className="w-16 h-16 object-cover mr-4 rounded"
-                                    />
-                                )}
-                                <div className="flex-grow">
-                                    <h2 className="text-xl font-bold">{item.title}</h2>
-                                    <p className="text-lg">Price: ${item.price}</p>
-                                    <p className="text-lg">Quantity: {item.quantity}</p>
-                                    <p className="text-lg font-semibold">Total: ${(item.price * item.quantity).toFixed(2)}</p>
-                                </div>
-                            </li>
-                        ))}
-                    </ul>
-                    <div className="mt-6 flex justify-between">
-                        <button
-                            onClick={handleClearAll}
-                            className="bg-red-500 hover:bg-red-700 text-white px-4 py-2 rounded font-semibold"
-                        >
-                            Clear All
-                        </button>
-                        <button
-                            onClick={handleBuyNow}
-                            className="bg-green-500 hover:bg-green-700 text-white px-4 py-2 rounded font-semibold"
-                        >
-                            Buy Now
-                        </button>
-                    </div>
-                </>
-            )}
+        <div className="flex justify-center items-center min-h-screen">
+            <div className="p-6 text-[#6dad63] rounded-lg shadow-lg border-2 border-[#6dad63] max-w-3xl w-full">
+                <h1 className="text-3xl font-bold mb-6">Checkout Items</h1>
+                {checkoutItems.length === 0 ? (
+                    <p className="text-xl text-gray-600">No items in checkout.</p>
+                ) : (
+                    <>
+                        <ul className="space-y-4">
+                            {checkoutItems.map((item, index) => (
+                                <li key={index} className="flex items-center border-b border-[#6dad63]/40 py-4">
+                                    {item.image_path && (
+                                        <img
+                                            src={`http://127.0.0.1:8000/storage/${item.image_path}`}
+                                            alt={item.title}
+                                            className="w-20 h-20 object-cover mr-4 rounded shadow-sm"
+                                        />
+                                    )}
+                                    <div className="flex-grow">
+                                        <h2 className="text-xl font-semibold text-[#093a74]">{item.title}</h2>
+                                        <p className="text-lg text-[#093a74] mt-1">Price: <span className="font-bold">${item.price}</span></p>
+                                        <p className="text-lg text-[#093a74] mt-1">Quantity: <span className="font-bold">{item.quantity}</span></p>
+                                        <p className="text-lg text-[#093a74] mt-1 font-semibold">Total: ${(item.price * item.quantity).toFixed(2)}</p>
+                                    </div>
+                                </li>
+                            ))}
+                        </ul>
+                        <div className="mt-6 flex justify-between">
+                            <button
+                                onClick={handleClearAll}
+                                className="bg-red-500 hover:bg-red-700 text-white px-6 py-2 rounded-md font-semibold"
+                            >
+                                Clear All
+                            </button>
+                            <button
+                                onClick={handleBuyNow}
+                                className="bg-[#6dad63] hover:bg-[#539748] text-white px-6 py-2 rounded-md font-semibold"
+                            >
+                                Buy Now
+                            </button>
+                        </div>
+                    </>
+                )}
+            </div>
         </div>
     );
 };

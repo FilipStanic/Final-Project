@@ -30,7 +30,7 @@ const Layout = ({ children }) => {
                         </svg>
                     </Link>
                     <Link to="/products">
-                        <button className='bg-white text-black'>Products</button>
+                        <button className='bg-[#327d92] hover:bg-[#5491a2] text-white'>Products</button>
                     </Link>
                     <Link to="/about">
                         <button className='bg-white text-black'>About Us</button>
@@ -56,7 +56,7 @@ const Layout = ({ children }) => {
                                 </div>
                             </div>
                             <button
-                                className="bg-[#6dad63] text-white px-4 py-2 rounded-full text-sm font-medium flex items-center space-x-2"
+                                className="bg-[#6dad63] hover:bg-[#539748] text-white px-4 py-2 rounded-full text-sm font-medium flex items-center space-x-2"
                                 onClick={() => navigate('/upload')}
                             >
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#ffffff" fill="none" strokeLinecap="round" strokeLinejoin="round">
@@ -67,6 +67,22 @@ const Layout = ({ children }) => {
                                 </svg>
                                 <span>Upload Image</span>
                             </button>
+                            <div className="relative">
+                                <Link to="/cart">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" viewBox="0 0 24 24" strokeWidth="1.9" stroke="#ffffff" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                                        <path stroke="none" d="M0 0h24H0z" fill="none" />
+                                        <path d="M6 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                                        <path d="M17 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                                        <path d="M17 17h-11v-14h-2" />
+                                        <path d="M6 5l14 1l-1 7h-13" />
+                                    </svg>
+                                    {cartItems.length > 0 && (
+                                        <span className="absolute top-0 right-0 bg-red-500 text-white rounded-full h-5 w-5 flex items-center justify-center text-xs">
+                                            {cartItems.length}
+                                        </span>
+                                    )}
+                                </Link>
+                            </div>
                         </>
                     ) : (
                         <div className="flex space-x-4 items-center justify-center text-center">
@@ -78,22 +94,6 @@ const Layout = ({ children }) => {
                             </Link>
                         </div>
                     )}
-                    <div className="relative">
-                        <Link to="/cart">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" viewBox="0 0 24 24" strokeWidth="1.9" stroke="#ffffff" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                                <path stroke="none" d="M0 0h24H0z" fill="none" />
-                                <path d="M6 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
-                                <path d="M17 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
-                                <path d="M17 17h-11v-14h-2" />
-                                <path d="M6 5l14 1l-1 7h-13" />
-                            </svg>
-                            {cartItems.length > 0 && (
-                                <span className="absolute top-0 right-0 bg-red-500 text-white rounded-full h-5 w-5 flex items-center justify-center text-xs">
-                                    {cartItems.length}
-                                </span>
-                            )}
-                        </Link>
-                    </div>
                 </div>
             </header>
 

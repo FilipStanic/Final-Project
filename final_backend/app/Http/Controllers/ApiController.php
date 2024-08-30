@@ -7,6 +7,7 @@ use App\Models\Cart;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Auth\Events\Verified;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -109,26 +110,22 @@ class ApiController extends Controller
 
     public function login(Request $request)
     {
-        Log::info('User attempting to log in', ['email' => $request->email]);
-
         try {
             $credentials = $request->only('email', 'password');
 
             if (!Auth::attempt($credentials)) {
-                Log::warning('Login failed - invalid credentials', ['email' => $request->email]);
                 return response()->json(['message' => 'Invalid email or password'], 401);
             }
 
             $user = Auth::user();
 
-            if ($user->role !== 'admin' && !$user->hasVerifiedEmail()) {
-                Log::warning('Login failed - email not verified', ['user_id' => $user->id]);
-                return response()->json(['message' => 'Your email is not verified. Please check your inbox.'], 403);
+            if (!$user->hasVerifiedEmail()) {
+                return response()->json([
+                    'message' => 'Your email address is not verified. Please check your email to verify your account.'
+                ], 403);
             }
 
             $token = $user->createToken('Personal Access Token')->plainTextToken;
-
-            Log::info('Login successful', ['user_id' => $user->id]);
 
             return response()->json([
                 'message' => 'Login successful',
@@ -140,15 +137,14 @@ class ApiController extends Controller
                 ],
             ], 200);
         } catch (\Exception $e) {
-            Log::error('Login failed', ['error' => $e->getMessage()]);
             return response()->json(['error' => 'Something went wrong', 'details' => $e->getMessage()], 500);
         }
     }
 
 
+
     public function register(Request $request)
     {
-        Log::info('Registering new user', ['email' => $request->email]);
 
         try {
             $validatedData = $request->validate([
@@ -165,62 +161,38 @@ class ApiController extends Controller
 
             event(new Registered($user));
 
-            $token = $user->createToken('Personal Access Token')->plainTextToken;
 
-            Log::info('User registered successfully', ['user_id' => $user->id]);
 
             return response()->json([
                 'message' => 'Registration successful. A verification email has been sent to your email address.',
-                'token' => $token,
                 'user' => [
                     'name' => $user->name,
                     'email' => $user->email,
                 ],
             ], 201);
         } catch (\Exception $e) {
-            Log::error('User registration failed', ['error' => $e->getMessage()]);
             return response()->json(['error' => 'Something went wrong', 'details' => $e->getMessage()], 500);
         }
     }
 
-
-
     public function verifyEmail(Request $request, $id, $hash)
     {
-        Log::info('Attempting to verify email', ['user_id' => $id, 'hash' => $hash]);
+        $user = User::findOrFail($id);
 
-        try {
-            $user = User::findOrFail($id);
+        if (!hash_equals((string) $hash, sha1($user->getEmailForVerification()))) {
+            return response()->json(['message' => 'The verification link is invalid or has expired. Please request a new link.'], 403);
+        }
 
-            if (!hash_equals($hash, sha1($user->getEmailForVerification()))) {
-                Log::warning('Invalid verification link', ['user_id' => $id]);
-                return response()->json(['message' => 'Invalid verification link.'], 403);
-            }
+        if ($user->hasVerifiedEmail()) {
+            return response()->json(['message' => 'Your email has been verified! Redirecting to login...'], 200);
+        }
 
-            if ($user->hasVerifiedEmail()) {
-                Log::info('Email already verified', ['user_id' => $id]);
-                return response()->json(['message' => 'Email already verified.'], 200);
-            }
-
-            $user->markEmailAsVerified();
-            Log::info('Email verified successfully', ['user_id' => $id]);
-            return response()->json(['message' => 'Email verified successfully.'], 200);
-        } catch (\Exception $e) {
-            Log::error('Email verification failed', ['user_id' => $id, 'error' => $e->getMessage()]);
-            return response()->json(['message' => 'Verification failed. Please try again.'], 500);
+        if ($user->markEmailAsVerified()) {
+            event(new Verified($user));
         }
     }
 
 
-
-    public function resendVerificationEmail(Request $request)
-    {
-        Log::info('Resending verification email', ['user_id' => $request->user()->id]);
-
-        $request->user()->sendEmailVerificationNotification();
-
-        return response()->json(['message' => 'Verification link sent.'], 200);
-    }
 
 
     public function getUser(Request $request)
@@ -284,8 +256,6 @@ class ApiController extends Controller
 
         return response()->json(['message' => 'Product created successfully!', 'product' => $product], 201);
     }
-
-
 
 
 
