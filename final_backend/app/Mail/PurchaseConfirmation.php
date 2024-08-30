@@ -24,7 +24,7 @@ class PurchaseConfirmation extends Mailable
 
     public function build()
     {
-        return $this->view('emails.purchase_confirmation')
+        return $this->markdown('emails.purchase_confirmation')
             ->subject('Purchase Confirmation')
             ->with([
                 'user' => $this->user,

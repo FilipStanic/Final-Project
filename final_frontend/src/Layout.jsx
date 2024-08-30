@@ -30,7 +30,7 @@ const Layout = ({ children }) => {
                         </svg>
                     </Link>
                     <Link to="/products">
-                        <button className='bg-[#327d92] text-white'>Products</button>
+                        <button className='bg-[#327d92] hover:bg-[#5491a2] text-white'>Products</button>
                     </Link>
                     <Link to="/about">
                         <button className='bg-white text-black'>About Us</button>
@@ -56,7 +56,7 @@ const Layout = ({ children }) => {
                                 </div>
                             </div>
                             <button
-                                className="bg-[#6dad63] text-white px-4 py-2 rounded-full text-sm font-medium flex items-center space-x-2"
+                                className="bg-[#6dad63] hover:bg-[#539748] text-white px-4 py-2 rounded-full text-sm font-medium flex items-center space-x-2"
                                 onClick={() => navigate('/upload')}
                             >
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#ffffff" fill="none" strokeLinecap="round" strokeLinejoin="round">

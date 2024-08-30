@@ -21,7 +21,7 @@ class ProductSeeder extends Seeder
                 'image_path' => 'product_images/tacos.jpg',
                 'category_id' => 3,
                 'user_id' => 1,
-                'tags' => [22, 26]
+                'tags' => [11, 17, 14]
             ],
             [
                 'title' => 'Mountain Sunset',
@@ -30,16 +30,16 @@ class ProductSeeder extends Seeder
                 'image_path' => 'product_images/mountain_sunset.jpg',
                 'category_id' => 2,
                 'user_id' => 1,
-                'tags' => [12, 13]
+                'tags' => [8, 10]
             ],
             [
                 'title' => 'Basketball Game',
                 'description' => 'High-intensity basketball game action shot.',
                 'price' => 30.50,
                 'image_path' => 'product_images/basketball_game.jpg',
-                'category_id' => 5,
+                'category_id' => 4,
                 'user_id' => 1,
-                'tags' => [35, 36]
+                'tags' => [18, 20, 3]
             ],
             [
                 'title' => 'Pizza Margherita',
@@ -48,7 +48,7 @@ class ProductSeeder extends Seeder
                 'image_path' => 'product_images/pizza_margherita.jpg',
                 'category_id' => 3,
                 'user_id' => 1,
-                'tags' => [21, 24]
+                'tags' => [13, 14, 15]
             ],
             [
                 'title' => 'City Nightscape',
@@ -57,7 +57,7 @@ class ProductSeeder extends Seeder
                 'image_path' => 'product_images/city_nightscape.jpg',
                 'category_id' => 2,
                 'user_id' => 1,
-                'tags' => [12, 13]
+                'tags' => [7]
             ],
             [
                 'title' => 'Wedding Photography',
@@ -75,7 +75,7 @@ class ProductSeeder extends Seeder
                 'image_path' => 'product_images/sushi_platter.jpg',
                 'category_id' => 3,
                 'user_id' => 1,
-                'tags' => [23, 27]
+                'tags' => [12, 14, 15]
             ],
             [
                 'title' => 'Desert Landscape',
@@ -84,16 +84,16 @@ class ProductSeeder extends Seeder
                 'image_path' => 'product_images/desert_landscape.jpg',
                 'category_id' => 2,
                 'user_id' => 1,
-                'tags' => [12, 20]
+                'tags' => [8]
             ],
             [
                 'title' => 'Football Action',
                 'description' => 'Exciting action shot from a high-stakes football game.',
                 'price' => 34.99,
                 'image_path' => 'product_images/football_action.jpg',
-                'category_id' => 5,
+                'category_id' => 4,
                 'user_id' => 1,
-                'tags' => [35, 36]
+                'tags' => [19, 21]
             ],
             [
                 'title' => 'Pasta Carbonara',
@@ -102,7 +102,7 @@ class ProductSeeder extends Seeder
                 'image_path' => 'product_images/pasta_carbonara.jpg',
                 'category_id' => 3,
                 'user_id' => 1,
-                'tags' => [21, 28]
+                'tags' => [13, 14]
             ],
             [
                 'title' => 'Forest Path',
@@ -111,7 +111,7 @@ class ProductSeeder extends Seeder
                 'image_path' => 'product_images/forest_path.jpg',
                 'category_id' => 2,
                 'user_id' => 1,
-                'tags' => [12, 14]
+                'tags' => [9, 10]
             ],
             [
                 'title' => 'BBQ Ribs',
@@ -120,7 +120,7 @@ class ProductSeeder extends Seeder
                 'image_path' => 'product_images/bbq_ribs.jpg',
                 'category_id' => 3,
                 'user_id' => 1,
-                'tags' => [26, 29]
+                'tags' => [15, 14]
             ],
             [
                 'title' => 'Portrait Photography',
@@ -129,25 +129,25 @@ class ProductSeeder extends Seeder
                 'image_path' => 'product_images/portrait_photography.jpg',
                 'category_id' => 1,
                 'user_id' => 1,
-                'tags' => [1, 2]
+                'tags' => [1, 5, 24]
             ],
             [
                 'title' => 'Extreme Sports',
                 'description' => 'Adrenaline-pumping action shot of extreme sports.',
                 'price' => 50.00,
                 'image_path' => 'product_images/extreme_sports.jpg',
-                'category_id' => 5,
+                'category_id' => 4,
                 'user_id' => 1,
-                'tags' => [35, 37]
+                'tags' => [21, 8]
             ],
             [
                 'title' => 'Veggie Burger',
                 'description' => 'Delicious plant-based burger with fresh veggies and vegan cheese.',
                 'price' => 12.75,
-                    'image_path' => 'product_images/veggie_burger.jpg',
+                'image_path' => 'product_images/veggie_burger.jpg',
                 'category_id' => 3,
                 'user_id' => 1,
-                'tags' => [27, 28]
+                'tags' => [16, 17]
             ],
             [
                 'title' => 'Street Photography',
@@ -165,16 +165,16 @@ class ProductSeeder extends Seeder
                 'image_path' => 'product_images/ocean_waves.jpg',
                 'category_id' => 2,
                 'user_id' => 1,
-                'tags' => [11, 14]
+                'tags' => [3, 4]
             ],
             [
                 'title' => 'Running Athlete',
                 'description' => 'Athlete in mid-stride during a competitive running event.',
                 'price' => 27.99,
                 'image_path' => 'product_images/running_athlete.jpg',
-                'category_id' => 5,
+                'category_id' => 4,
                 'user_id' => 1,
-                'tags' => [35, 37]
+                'tags' => [20, 21]
             ],
             [
                 'title' => 'Caesar Salad',
@@ -183,7 +183,7 @@ class ProductSeeder extends Seeder
                 'image_path' => 'product_images/caesar_salad.jpg',
                 'category_id' => 3,
                 'user_id' => 1,
-                'tags' => [28, 29]
+                'tags' => [14, 17]
             ],
             [
                 'title' => 'Sunrise Over the Ocean',
@@ -192,54 +192,91 @@ class ProductSeeder extends Seeder
                 'image_path' => 'product_images/sunrise_ocean.jpg',
                 'category_id' => 2,
                 'user_id' => 1,
-                'tags' => [11, 14]
+                'tags' => [10, 6]
             ],
             [
                 'title' => 'Abstract Painting',
                 'description' => 'A vibrant and expressive abstract painting.',
                 'price' => 120.00,
                 'image_path' => 'product_images/abstract_painting.jpg',
-                'category_id' => 6,
+                'category_id' => 5,
                 'user_id' => 1,
-                'tags' => [51, 53]
+                'tags' => [26, 24]
             ],
             [
                 'title' => 'Digital Sculpture',
                 'description' => 'A modern digital sculpture showcasing intricate designs.',
                 'price' => 85.50,
                 'image_path' => 'product_images/digital_sculpture.jpg',
-                'category_id' => 6,
+                'category_id' => 5,
                 'user_id' => 1,
-                'tags' => [52, 54]
+                'tags' => [25, 28]
             ],
             [
                 'title' => 'Pop Art Collage',
                 'description' => 'A colorful and eclectic pop art collage.',
                 'price' => 70.75,
                 'image_path' => 'product_images/pop_art_collage.jpg',
-                'category_id' => 6,
+                'category_id' => 5,
                 'user_id' => 1,
-                'tags' => [55, 57]
+                'tags' => [27, 29]
             ],
             [
                 'title' => 'Street Art Graffiti',
                 'description' => 'Bold and striking street art graffiti on canvas.',
                 'price' => 95.00,
                 'image_path' => 'product_images/street_art_graffiti.jpg',
-                'category_id' => 6,
+                'category_id' => 5,
                 'user_id' => 1,
-                'tags' => [56, 58]
+                'tags' => [28, 30]
             ],
             [
                 'title' => 'Calligraphy Art',
                 'description' => 'Elegant calligraphy art with traditional and modern elements.',
                 'price' => 60.00,
                 'image_path' => 'product_images/calligraphy_art.jpg',
+                'category_id' => 5,
+                'user_id' => 1,
+                'tags' => [23, 24]
+            ],
+            [
+                'title' => 'Butterfly on Flower',
+                'description' => 'A beautiful butterfly perched delicately on a vibrant flower.',
+                'price' => 20.00,
+                'image_path' => 'product_images/butterfly_on_flower.jpg',
                 'category_id' => 6,
                 'user_id' => 1,
-                'tags' => [50, 51]
-            ]
+                'tags' => [32, 33, 34]
+            ],
+            [
+                'title' => 'Deer in the Woods',
+                'description' => 'A serene moment of a deer grazing peacefully in the woods.',
+                'price' => 35.00,
+                'image_path' => 'product_images/deer_in_woods.jpg',
+                'category_id' => 6,
+                'user_id' => 1,
+                'tags' => [31, 33, 9]
+            ],
+            [
+                'title' => 'Blooming Rose',
+                'description' => 'A close-up shot of a blooming rose, showcasing its delicate petals.',
+                'price' => 15.00,
+                'image_path' => 'product_images/blooming_rose.jpg',
+                'category_id' => 6,
+                'user_id' => 1,
+                'tags' => [32, 34]
+            ],
+            [
+                'title' => 'Mountain Waterfall',
+                'description' => 'A crystal-clear river flowing through the majestic mountains.',
+                'price' => 40.00,
+                'image_path' => 'product_images/mountain_waterfall.jpg',
+                'category_id' => 6,
+                'user_id' => 1,
+                'tags' => [6, 8, 9]
+            ],
         ];
+
 
         foreach ($products as $productData) {
             $tags = $productData['tags'];

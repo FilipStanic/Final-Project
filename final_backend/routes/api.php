@@ -23,6 +23,7 @@ Route::post('/register', [ApiController::class, 'register']);
 Route::get('email/verify/{id}/{hash}', [ApiController::class, 'verifyEmail'])->name('api.verification.verify')->middleware('signed');
 
 
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', [ApiController::class, 'getUser']);
     Route::delete('/user/{id}', [ApiController::class, 'deleteUser']);

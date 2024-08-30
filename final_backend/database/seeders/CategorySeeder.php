@@ -18,23 +18,23 @@ class CategorySeeder extends Seeder
     {
         $categories = [
             'People' => [
-                'Portrait', 'Kids', 'Wedding', 'Fashion', 'Street', 'Candid', 'Family', 'Headshots', 'Lifestyle', 'Selfie'
+                'Portrait', 'Wedding', 'Street Photography', 'Candid', 'Headshots'
             ],
             'Landscape' => [
-                'Ocean', 'Desert', 'City', 'Mountains', 'Forest', 'Sunrise', 'Sunset', 'Rivers', 'Nightscape', 'Aerial'
+                'Water', 'Cityscape', 'Mountains', 'Forest', 'Sunset/Sunrise'
             ],
             'Food' => [
-                'Italian', 'Mexican', 'Asian', 'Desserts', 'Beverages', 'Street Food', 'Vegan', 'Breakfast', 'Seafood', 'Gourmet'
-            ],
-            'Nature' => [
-                'Animals', 'Plants', 'Wildlife', 'Flowers', 'Insects', 'Underwater', 'Landscapes', 'Forests', 'Birds', 'Macro'
+                'Mexican', 'Asian', 'Italian', 'Street Food', 'Gourmet', 'Vegan', 'Breakfast'
             ],
             'Sports' => [
-                'Basketball', 'Indoor', 'Football', 'Running', 'Cycling', 'Swimming', 'Tennis', 'Extreme', 'Gym', 'Yoga'
+                'Basketball', 'Football', 'Running', 'Extreme Sports', 'Indoor Sports'
             ],
             'Art' => [
-                'Drawing', 'AI', 'Painting', 'Sculpture', 'Digital Art', 'Calligraphy', 'Collage', 'Abstract', 'Pop Art', 'Street Art'
-            ]
+                'Calligraphy', 'Abstract', 'Sculpture', 'Digital Art', 'Pop Art', 'Street Art', 'Collage', 'Graffiti'
+            ],
+            'Nature' => [
+                'Animals', 'Plants', 'Wildlife', 'Flowers', 'Insects', 'Underwater', 'Macro'
+    ],
         ];
 
         foreach ($categories as $categoryName => $tags) {

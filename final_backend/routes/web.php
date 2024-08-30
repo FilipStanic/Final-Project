@@ -32,11 +32,16 @@ Route::middleware(['web'])->group(function () {
 
         Route::resource('products', ProductController::class)->only([
             'create', 'store', 'show', 'edit', 'update', 'destroy'
+
         ]);
     });
 
     Route::middleware(['auth', AdminMiddleware::class])->group(function () {
 
+    });
+
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::get('/download/all-images/{order_id}', [CartController::class, 'downloadAllImages'])->name('download.all');
     });
 
     require __DIR__.'/auth.php';

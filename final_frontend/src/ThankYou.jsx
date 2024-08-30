@@ -73,7 +73,7 @@ const ThankYou = () => {
                 </button>
                 <button
                     onClick={() => navigate('/products')}
-                    className="bg-green-500 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium"
+                    className="bg-[#6dad63] hover:bg-[#539748] text-white px-4 py-2 rounded-lg font-medium"
                 >
                     Products
                 </button>

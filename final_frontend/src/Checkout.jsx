@@ -111,7 +111,7 @@ const Checkout = () => {
                             </button>
                             <button
                                 onClick={handleBuyNow}
-                                className="bg-[#093a74] hover:bg-[#6dad63] text-white px-6 py-2 rounded-md font-semibold"
+                                className="bg-[#6dad63] hover:bg-[#539748] text-white px-6 py-2 rounded-md font-semibold"
                             >
                                 Buy Now
                             </button>
