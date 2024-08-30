@@ -128,4 +128,4 @@ admin@admin.com
 admin
 ```
 
-### Keep in mind that there is a problem when loging in to an account, the user has to refresh the page to add anything to cart, or the error will persist.
+### ⚠️ Keep in mind that there is a problem when loging in to an account, the user has to refresh the page to add anything to cart, or the error will persist.
