@@ -127,3 +127,5 @@ To access the admin panel and explore the management features of this e-commerce
 admin@admin.com
 admin
 ```
+
+### Keep in mind that there is a problem when loging in to an account, the user has to refresh the page to add anything to cart, or the error will persist.
